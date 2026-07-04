@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   mobileMenuBtn.addEventListener("click", () => {
     navMenu.classList.toggle("open");
     const isOpen = navMenu.classList.contains("open");
-    mobileMenuBtn.querySelector("i").className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+    mobileMenuBtn.querySelector("i").className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-ellipsis-vertical";
   });
 
   // Close mobile menu when clicking on any nav link

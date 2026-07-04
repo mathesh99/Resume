@@ -1341,11 +1341,57 @@ footer {
 
 @media (max-width: 768px) {
   header {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 15px 20px !important;
+    z-index: 10000 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  header.scrolled {
+    background: var(--bg-glass) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+  }
+
+  header .logo {
+    display: none !important;
+  }
+
+  header .nav-actions {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+
+  #pdf-export-btn {
     display: none !important;
   }
   
   .mobile-menu-btn {
-    display: block;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    border: 1px solid var(--border-color) !important;
+    background: transparent !important;
+    color: var(--text-primary) !important;
+    font-size: 1.15rem !important;
+    cursor: pointer !important;
+    transition: var(--transition-smooth) !important;
   }
   
   .nav-menu {
