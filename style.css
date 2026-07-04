@@ -1236,6 +1236,10 @@ footer {
   font-style: italic;
 }
 
+.mobile-only-pdf-btn {
+  display: none !important;
+}
+
 /* ==========================================================================
    RESPONSIVE DESIGN (MEDIA QUERIES)
    ========================================================================== */
@@ -1625,9 +1629,28 @@ footer {
     padding: 5px 12px !important;
     border-radius: 30px !important;
   }
+
+  #pdf-export-btn {
+    display: none !important;
+  }
+
+  .mobile-only-pdf-btn {
+    display: flex !important;
+  }
 }
 
 @media (max-width: 480px) {
+  header {
+    width: 94% !important;
+    left: 3% !important;
+    transform: none !important;
+    padding: 10px 12px !important;
+  }
+
+  .logo {
+    font-size: 1.3rem !important;
+  }
+
   .hero-title {
     font-size: 2.5rem;
   }

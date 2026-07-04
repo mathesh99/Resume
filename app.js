@@ -476,6 +476,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (pdfExportBtn) {
     pdfExportBtn.addEventListener("click", handlePdfTrigger);
   }
+  const mobilePdfExportBtn = document.getElementById("mobile-pdf-export-btn");
+  if (mobilePdfExportBtn) {
+    mobilePdfExportBtn.addEventListener("click", handlePdfTrigger);
+  }
   const heroBtnPdf = document.getElementById("hero-btn-pdf");
   if (heroBtnPdf) {
     heroBtnPdf.addEventListener("click", handlePdfTrigger);
