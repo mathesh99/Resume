@@ -1127,4 +1127,138 @@ if (typeof module !== 'undefined' && module.exports) {
       showStatus("Admin access credentials updated successfully!", "success");
     });
   }
+
+  /* ==========================================================================
+     GITHUB AUTO-SYNC CMS INTEGRATION
+     ========================================================================== */
+  const githubSyncForm = document.getElementById("github-sync-form");
+  const githubRepoInput = document.getElementById("github-repo");
+  const githubTokenInput = document.getElementById("github-token");
+  const githubSyncBtn = document.getElementById("github-sync-btn");
+
+  if (githubSyncForm) {
+    // Populate stored GitHub configuration on load
+    githubRepoInput.value = localStorage.getItem("githubRepo") || "mathesh99/Resume";
+    githubTokenInput.value = localStorage.getItem("githubToken") || "";
+
+    // Save GitHub configuration listener
+    githubSyncForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      
+      const repoVal = githubRepoInput.value.trim();
+      const tokenVal = githubTokenInput.value.trim();
+
+      if (!repoVal || !tokenVal) {
+        alert("Both Repository Path and Token are required!");
+        return;
+      }
+
+      localStorage.setItem("githubRepo", repoVal);
+      localStorage.setItem("githubToken", tokenVal);
+
+      showStatus("GitHub configurations saved successfully!", "success");
+    });
+  }
+
+  if (githubSyncBtn) {
+    githubSyncBtn.addEventListener("click", async () => {
+      const repo = localStorage.getItem("githubRepo") || "mathesh99/Resume";
+      const token = localStorage.getItem("githubToken");
+
+      if (!token) {
+        // Switch tab to the GitHub settings view to help the user configure PAT credentials
+        const tabBtn = document.querySelector('.admin-tab-btn[data-target="panel-github"]');
+        if (tabBtn) {
+          tabBtn.click();
+        }
+        alert("Please enter and save your GitHub Personal Access Token (PAT) first to enable auto-sync!");
+        return;
+      }
+
+      // Display loading state
+      githubSyncBtn.disabled = true;
+      const originalHtml = githubSyncBtn.innerHTML;
+      githubSyncBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Syncing...`;
+      showStatus("Connecting to GitHub API, serializing data...", "success");
+
+      try {
+        // 1. Serialize active workspace data state
+        const state = serializeResumeState();
+        const fileContent = `// Personal Portfolio and Resume Data - Mathesh Nadar
+const resumeData = ${JSON.stringify(state, null, 2)};
+
+// Export data for browser inclusion or node context (supporting both ES modules, CommonJS and standard browser global)
+window.resumeData = resumeData;
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = resumeData;
+}
+`;
+
+        const targetFilePath = "resume-data.js";
+        const apiUrl = `https://api.github.com/repos/${repo}/contents/${targetFilePath}`;
+
+        // 2. Fetch the target file's current SHA from GitHub API
+        const getResponse = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Accept": "application/vnd.github.v3+json",
+            "Cache-Control": "no-cache"
+          }
+        });
+
+        let fileSha = "";
+        if (getResponse.ok) {
+          const fileData = await getResponse.json();
+          fileSha = fileData.sha;
+        } else if (getResponse.status !== 404) {
+          // 404 means the file doesn't exist yet (which is fine, we will create it), other errors are critical
+          const errData = await getResponse.json();
+          throw new Error(errData.message || "Failed to fetch file metadata from GitHub.");
+        }
+
+        // 3. Convert content text into UTF-8 base64 encoding (btoa requires character escaping for Unicode compatibility)
+        // Chunk encoding avoids maximum call stack size limits on Function.prototype.apply for large image/PDF assets
+        const utf8Bytes = new TextEncoder().encode(fileContent);
+        let binaryString = "";
+        const len = utf8Bytes.byteLength;
+        const chunkSize = 65536; // 64KB chunks
+        for (let i = 0; i < len; i += chunkSize) {
+          const chunk = utf8Bytes.subarray(i, i + chunkSize);
+          binaryString += String.fromCharCode.apply(null, chunk);
+        }
+        const base64Content = btoa(binaryString);
+
+        // 4. Send PUT request to update the file in the repository
+        const putResponse = await fetch(apiUrl, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Content-Type": "application/json",
+            "Accept": "application/vnd.github.v3+json"
+          },
+          body: JSON.stringify({
+            message: "Update resume data via Admin Dashboard Sync",
+            content: base64Content,
+            sha: fileSha || undefined
+          })
+        });
+
+        if (!putResponse.ok) {
+          const errData = await putResponse.json();
+          throw new Error(errData.message || "Failed to update file content on GitHub.");
+        }
+
+        showStatus("Successfully synchronized data back to GitHub! Pages deployment started. Live in 30 seconds.", "success");
+        alert("Successfully synchronized! GitHub Pages will rebuild. The changes will be live globally in 30-45 seconds!");
+
+      } catch (err) {
+        showStatus("GitHub Sync failed: " + err.message, "error");
+        alert("Sync failed: " + err.message);
+      } finally {
+        githubSyncBtn.disabled = false;
+        githubSyncBtn.innerHTML = originalHtml;
+      }
+    });
+  }
 });

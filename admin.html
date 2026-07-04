@@ -41,7 +41,11 @@
       <button class="btn btn-primary" id="save-local-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px;">
         <i class="fa-solid fa-cloud-arrow-up"></i> Save to Browser
       </button>
-      <!-- Export configuration file -->
+      <!-- Sync to GitHub -->
+      <button class="btn btn-primary" id="github-sync-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; background: var(--gradient-secondary); box-shadow: 0 0 20px rgba(16, 185, 129, 0.25); border: none;">
+        <i class="fa-solid fa-rotate"></i> Sync to GitHub
+      </button>
+      <!-- Import configuration file -->
       <button class="btn btn-secondary" id="export-file-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; background: rgba(99, 102, 241, 0.1); border-color: var(--primary); color: var(--primary);">
         <i class="fa-solid fa-file-export"></i> Export File
       </button>
@@ -86,6 +90,9 @@
         </button>
         <button class="admin-tab-btn" data-target="panel-settings">
           <i class="fa-solid fa-gears"></i> Access Security
+        </button>
+        <button class="admin-tab-btn" data-target="panel-github">
+          <i class="fa-solid fa-share-nodes"></i> GitHub Sync
         </button>
       </aside>
 
@@ -306,6 +313,37 @@
           </form>
         </div>
         
+        <!-- Panel 8: GitHub Auto-Sync CMS -->
+        <div class="admin-panel" id="panel-github">
+          <div class="section-header" style="text-align: left; margin-bottom: 20px;">
+            <h3 class="admin-panel-title"><i class="fa-solid fa-share-nodes" style="color: var(--primary); margin-right: 8px;"></i> GitHub Auto-Sync CMS</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 5px;">Connect your admin page directly to your GitHub repository. Once set up, clicking <strong>Sync to GitHub</strong> in the header will instantly update your live portfolio globally for everyone.</p>
+          </div>
+          
+          <form id="github-sync-form" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+            <div class="form-group">
+              <label for="github-repo">GitHub Repository Path</label>
+              <input type="text" id="github-repo" class="form-input" placeholder="username/repository (e.g., mathesh99/Resume)" required>
+              <span class="admin-input-help">Format: username/repository (must match your GitHub path).</span>
+            </div>
+            
+            <div class="form-group">
+              <label for="github-token">Personal Access Token (PAT)</label>
+              <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                <input type="password" id="github-token" class="form-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxx" style="width: 100%; padding-right: 40px;" required>
+                <i class="fa-solid fa-eye toggle-password-visibility" data-target="github-token" style="position: absolute; right: 15px; cursor: pointer; color: var(--text-secondary); font-size: 0.95rem; z-index: 10;"></i>
+              </div>
+              <span class="admin-input-help">
+                Create a token on GitHub with <strong>repo</strong> scopes. We save this token only in your browser's secure local storage.
+              </span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="align-self: flex-start; padding: 10px 24px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-floppy-disk"></i> Save GitHub Config
+            </button>
+          </form>
+        </div>
+        
       </section>
     </div>
   </main>
@@ -368,8 +406,8 @@
   </div>
 
   <!-- Load resume data configurations -->
-  <script src="resume-data.js?v=18"></script>
+  <script src="resume-data.js?v=19"></script>
   <!-- Dashboard Controller Script -->
-  <script src="admin.js?v=18"></script>
+  <script src="admin.js?v=19"></script>
 </body>
 </html>
