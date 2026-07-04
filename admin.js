@@ -989,14 +989,75 @@ if (typeof module !== 'undefined' && module.exports) {
     }
   });
 
+  // Import file configurations
+  const importFileBtn = document.getElementById("import-file-btn");
+  const importFileInput = document.getElementById("import-file-input");
+
+  if (importFileBtn && importFileInput) {
+    importFileBtn.addEventListener("click", () => {
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const content = event.target.result;
+          let parsedData = null;
+
+          // Attempt to parse content as JSON first
+          try {
+            parsedData = JSON.parse(content);
+          } catch (jsonErr) {
+            // If JSON fails, it might be an exported JS file.
+            // Search for first '{' and last '}'
+            const startIdx = content.indexOf("{");
+            const endIdx = content.lastIndexOf("}");
+            if (startIdx !== -1 && endIdx !== -1) {
+              const jsonSubstring = content.substring(startIdx, endIdx + 1);
+              parsedData = JSON.parse(jsonSubstring);
+            } else {
+              throw new Error("Could not find resume data object inside the selected file.");
+            }
+          }
+
+          // Validate that the parsed object has standard keys like "personal"
+          if (!parsedData || !parsedData.personal || !parsedData.personal.name) {
+            throw new Error("Invalid file format. Make sure the file contains your personal resume details.");
+          }
+
+          // Save to localStorage
+          localStorage.setItem("customResumeData", JSON.stringify(parsedData));
+          
+          // Show status and reload
+          showStatus("Resume configuration imported successfully! Reloading fields...", "success");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+
+        } catch (err) {
+          showStatus("Import failed: " + err.message, "error");
+        }
+      };
+      reader.readAsText(file);
+      // Clear input so same file can be re-selected if needed
+      importFileInput.value = "";
+    });
+  }
+
   // Reset to static code values
   const resetDataBtn = document.getElementById("reset-data-btn");
-  resetDataBtn.addEventListener("click", () => {
-    if (confirm("This will erase all changes you made in the browser and load default records. Continue?")) {
-      localStorage.removeItem("customResumeData");
-      window.location.reload();
-    }
-  });
+  if (resetDataBtn) {
+    resetDataBtn.addEventListener("click", () => {
+      if (confirm("This will erase all changes you made in the browser and load default records. Continue?")) {
+        localStorage.removeItem("customResumeData");
+        window.location.reload();
+      }
+    });
+  }
 
   // UI helper for feedback notifications
   function showStatus(message, type) {
