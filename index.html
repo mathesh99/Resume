@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional interactive resume and career portfolio. View academic qualifications, technical skills, professional work experience, and projects. Optimized for HR recruiters.">
+  <meta name="keywords" content="Software Engineer, Resume, CV, Full Stack Developer, Portfolio, Interactive Resume, Academics, Experience">
+  <meta name="author" content="Alex Morgan">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>👨‍💻</text></svg>">
+  <title>Alex Morgan | Senior Full-Stack Engineer Resume</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=12">
+</head>
+<body>
+
+  <!-- Background Decorative Glowing Lights -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-glow bg-glow-3"></div>
+
+  <!-- Header & Navigation -->
+  <header id="main-header">
+    <a href="#" class="logo" id="header-logo">AM.dev</a>
+    
+    <nav class="nav-menu" id="nav-menu">
+      <a href="#about" class="nav-link" id="nav-link-about">About</a>
+      <a href="#experience" class="nav-link" id="nav-link-experience">Experience</a>
+      <a href="#education" class="nav-link" id="nav-link-education">Education</a>
+      <a href="#achievements" class="nav-link" id="nav-link-achievements">Achievements</a>
+      <a href="#skills" class="nav-link" id="nav-link-skills">Skills</a>
+      <a href="#projects" class="nav-link" id="nav-link-projects">Projects</a>
+    </nav>
+    
+    <div class="nav-actions">
+      <!-- Dark/Light Theme Toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+        <i class="fa-solid fa-moon"></i>
+        <i class="fa-solid fa-sun"></i>
+      </button>
+      
+      <!-- PDF Export Button -->
+      <button class="btn btn-secondary" id="pdf-export-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px;">
+        <i class="fa-solid fa-file-pdf"></i> Export PDF
+      </button>
+      
+      <!-- Mobile Menu Toggle Button -->
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open mobile navigation menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- Hero / Introduction Section -->
+    <section id="hero">
+      <div class="hero-wrapper">
+        <div class="hero-content">
+          <div class="hero-badge" id="hero-badge">
+            <span class="pulse-dot" style="width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--secondary);"></span>
+            Available for new opportunities
+          </div>
+          <h1 class="hero-title" id="hero-name-heading">Hi, I'm <span id="hero-name">Alex Morgan</span></h1>
+          <h2 class="hero-subtitle" id="hero-title-role">Senior Full-Stack Engineer</h2>
+          <p class="hero-desc" id="hero-description-text">
+            Building scalable web experiences & high-performance backend systems.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="hero-btn-pdf"><i class="fa-solid fa-download"></i> Save Resume</button>
+          </div>
+        </div>
+        
+        <!-- Interactive profile graphics -->
+        <div class="hero-visual">
+          <div class="avatar-container" id="avatar-interactive">
+            <div class="avatar-graphic">
+              <span class="avatar-initials" id="avatar-initials-text">AM</span>
+              <div class="avatar-tech-ring"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about">
+      <div class="section-header">
+        <h2 class="section-title" id="about-section-heading">About Me</h2>
+        <p class="section-subtitle" id="about-section-subtitle">A brief overview of who I am, my core values, and contact details</p>
+      </div>
+      
+      <div class="about-wrapper">
+        <div class="glass-card about-text">
+          <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 600;" id="about-bio-title">My Professional Journey</h3>
+          <p id="about-bio-content" style="color: var(--text-secondary);">
+            Loading bio description...
+          </p>
+          
+          <div class="about-details-grid" id="about-info-grid">
+            <!-- Dynamic personal details populated from JS -->
+          </div>
+        </div>
+        
+        <div class="about-values-container">
+          <div class="glass-card value-card">
+            <div class="value-icon"><i class="fa-solid fa-code"></i></div>
+            <div class="value-content">
+              <h4 class="value-title">Clean & Maintainable Code</h4>
+              <p class="value-desc">Writing readable, modular, and reusable code adhering to DRY, SOLID, and clean architecture practices.</p>
+            </div>
+          </div>
+          
+          <div class="glass-card value-card">
+            <div class="value-icon"><i class="fa-solid fa-gauge-high"></i></div>
+            <div class="value-content">
+              <h4 class="value-title">Performance-Driven Development</h4>
+              <p class="value-desc">Optimizing load times, rendering metrics, microservice latency, and backend queries for speed and efficiency.</p>
+            </div>
+          </div>
+          
+          <div class="glass-card value-card">
+            <div class="value-icon"><i class="fa-solid fa-people-group"></i></div>
+            <div class="value-content">
+              <h4 class="value-title">Collaborative Leadership</h4>
+              <p class="value-desc">Mentoring team members, driving agile sprints, and translating complex product concepts into clean code implementations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Additional Grid for Interests, Languages, Activities -->
+      <div class="about-additional-grid" id="about-extra-grid">
+        <div class="glass-card" id="about-interests-card">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 600; margin-bottom: 15px;">
+            <i class="fa-solid fa-heart" style="color: var(--primary); margin-right: 8px;"></i> Interests
+          </h4>
+          <ul id="about-interests-list" style="color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.4;">
+            <!-- Dynamic list -->
+          </ul>
+        </div>
+        
+        <div class="glass-card" id="about-languages-card">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 600; margin-bottom: 15px;">
+            <i class="fa-solid fa-language" style="color: var(--primary); margin-right: 8px;"></i> Languages
+          </h4>
+          <ul id="about-languages-list" style="color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.4;">
+            <!-- Dynamic list -->
+          </ul>
+        </div>
+        
+        <div class="glass-card" id="about-activities-card">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 600; margin-bottom: 15px;">
+            <i class="fa-solid fa-chart-line" style="color: var(--primary); margin-right: 8px;"></i> Activities
+          </h4>
+          <ul id="about-activities-list" style="color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.4;">
+            <!-- Dynamic list -->
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+      <div class="section-header">
+        <h2 class="section-title" id="experience-section-heading">Professional Experience</h2>
+        <p class="section-subtitle" id="experience-section-subtitle">My work history, career milestones, and key technical achievements</p>
+      </div>
+      
+      <div class="timeline-wrapper">
+        <div class="timeline" id="experience-timeline">
+          <!-- Dynamic experience items inserted here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+      <div class="section-header">
+        <h2 class="section-title" id="education-section-heading">Academics & Education</h2>
+        <p class="section-subtitle" id="education-section-subtitle">Degrees, universities, grades, and academic achievements</p>
+      </div>
+      
+      <div class="timeline-wrapper">
+        <div class="timeline" id="education-timeline">
+          <!-- Dynamic academic items inserted here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements">
+      <div class="section-header">
+        <h2 class="section-title" id="achievements-section-heading">Key Achievements</h2>
+        <p class="section-subtitle" id="achievements-section-subtitle">Milestones, scholarship awards, and project efficiency metrics</p>
+      </div>
+      <div class="achievements-grid" id="achievements-cards-grid">
+        <!-- Dynamic achievements cards inserted here -->
+      </div>
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section id="skills">
+      <div class="section-header">
+        <h2 class="section-title" id="skills-section-heading">Technical Skills</h2>
+        <p class="section-subtitle" id="skills-section-subtitle">Categorized technologies, tools, and proficiencies</p>
+      </div>
+      
+      <div class="skills-grid" id="skills-categories-grid">
+        <!-- Dynamic skill categories and progress bars inserted here -->
+      </div>
+    </section>
+
+    <!-- Projects Portfolio Section -->
+    <section id="projects">
+      <div class="section-header">
+        <h2 class="section-title" id="projects-section-heading">Featured Projects</h2>
+        <p class="section-subtitle" id="projects-section-subtitle">Open-source contributions, software engineering systems, and live tools</p>
+      </div>
+      
+      <!-- Filter Toolbar -->
+      <div class="projects-toolbar" id="projects-filter-bar">
+        <button class="filter-btn active" data-filter="all" id="filter-btn-all">All Projects</button>
+        <!-- Categories will be generated dynamically -->
+      </div>
+      
+      <div class="projects-grid" id="projects-listing-grid">
+        <!-- Dynamic project cards inserted here -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content" style="display: flex; flex-direction: column; gap: 15px; align-items: center; text-align: center;">
+      <!-- Footer Contact Info -->
+      <div class="footer-contact-info" id="footer-contact-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px 30px; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 5px;">
+        <!-- Dynamic contact info -->
+      </div>
+      <p class="footer-copyright" id="footer-copyright-text">&copy; 2026 Alex Morgan. All rights reserved.</p>
+      <p class="footer-note" id="footer-note-text">Created with dynamic data rendering and optimized print layouts.</p>
+    </div>
+  </footer>
+
+  <!-- Dynamic Data File -->
+  <script src="resume-data.js?v=12"></script>
+  <!-- Application Interactivity & Render Engine -->
+  <script src="app.js?v=12"></script>
+</body>
+</html>

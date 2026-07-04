@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Admin Dashboard to customize resume and portfolio details. Update experiences, academics, skills, and projects dynamically.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚙️</text></svg>">
+  <title>Admin Dashboard | Resume Customizer</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="style.css?v=12">
+  <!-- Cropper.js Image Cropping Tool CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+</head>
+<body>
+
+  <!-- Decorative glow items -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Dashboard Wrapper (Only visible when authenticated) -->
+  <div id="admin-dashboard-wrapper" style="display: none;">
+    <!-- Header with action actions -->
+    <header id="main-header" style="justify-content: space-between; padding: 0 40px; border-radius: 20px; top: 15px;">
+    <span class="logo">AM.admin</span>
+    
+    <div class="nav-actions">
+      <!-- Dark/Light Theme Toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" style="margin-right: 5px;">
+        <i class="fa-solid fa-moon"></i>
+        <i class="fa-solid fa-sun"></i>
+      </button>
+      <!-- Back to Portfolio -->
+      <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px;">
+        <i class="fa-solid fa-arrow-left"></i> View Portfolio
+      </a>
+      <!-- Save to Browser -->
+      <button class="btn btn-primary" id="save-local-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px;">
+        <i class="fa-solid fa-cloud-arrow-up"></i> Save to Browser
+      </button>
+      <!-- Export configuration file -->
+      <button class="btn btn-secondary" id="export-file-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; background: rgba(99, 102, 241, 0.1); border-color: var(--primary); color: var(--primary);">
+        <i class="fa-solid fa-file-export"></i> Export File
+      </button>
+      <!-- Logout -->
+      <button class="btn btn-secondary" id="logout-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; border-color: rgba(239, 68, 68, 0.3); color: #ef4444; margin-left: 5px;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+      <!-- Reset edits -->
+      <button class="btn btn-secondary" id="reset-data-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; border-color: rgba(239, 68, 68, 0.3); color: #ef4444;">
+        <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="admin-container">
+      
+      <!-- Left sidebar selector tabs -->
+      <aside class="glass-card admin-sidebar">
+        <button class="admin-tab-btn active" data-target="panel-personal">
+          <i class="fa-solid fa-user-gear"></i> Personal Details
+        </button>
+        <button class="admin-tab-btn" data-target="panel-experience">
+          <i class="fa-solid fa-briefcase"></i> Work History
+        </button>
+        <button class="admin-tab-btn" data-target="panel-education">
+          <i class="fa-solid fa-graduation-cap"></i> Academics
+        </button>
+        <button class="admin-tab-btn" data-target="panel-skills">
+          <i class="fa-solid fa-sliders"></i> Technical Skills
+        </button>
+        <button class="admin-tab-btn" data-target="panel-projects">
+          <i class="fa-solid fa-diagram-project"></i> Projects
+        </button>
+        <button class="admin-tab-btn" data-target="panel-achievements">
+          <i class="fa-solid fa-award"></i> Achievements
+        </button>
+      </aside>
+
+      <!-- Right contents editor panels -->
+      <section class="glass-card admin-content-wrapper" style="flex-grow: 1; padding: 40px; min-height: 550px;">
+        <div id="admin-status-message" class="form-status" style="margin-bottom: 25px; display: none;"></div>
+        
+        <!-- Panel 1: Personal Info -->
+        <div class="admin-panel active" id="panel-personal">
+          <h3 class="admin-panel-title">Personal Profile Information</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 20px;">Update your basic contact info, website links, biography, and location details.</p>
+          
+          <form class="contact-form" id="form-personal">
+            <div class="admin-form-row">
+              <div class="form-group">
+                <label for="p-name">Full Name</label>
+                <input type="text" id="p-name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="p-title">Role Title</label>
+                <input type="text" id="p-title" class="form-input" required>
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="form-group">
+                <label for="p-img-url">Profile Image Link / URL (Optional)</label>
+                <input type="text" id="p-img-url" class="form-input" placeholder="e.g. https://domain.com/pic.jpg">
+              </div>
+              <div class="form-group">
+                <label for="p-img-file">Or Upload Profile Picture</label>
+                <input type="file" id="p-img-file" class="form-input" accept="image/*">
+                <span class="admin-input-help img-status-msg" style="color:var(--secondary); display:block; margin-top:5px;"></span>
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="form-group">
+                <label for="p-resume-url">Resume PDF Link / URL (Optional)</label>
+                <input type="text" id="p-resume-url" class="form-input" placeholder="e.g. https://drive.google.com/file/... (Recommended)">
+              </div>
+              <div class="form-group">
+                <label for="p-resume-file">Or Upload Resume PDF (3MB Limit)</label>
+                <input type="file" id="p-resume-file" class="form-input" accept="application/pdf">
+                <span class="admin-input-help resume-status-msg" style="color:var(--secondary); display:block; margin-top:5px;"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="p-subtitle">Subtitle / Motto</label>
+              <input type="text" id="p-subtitle" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label for="p-availability">Availability Badge Text (e.g. 'Available for new opportunities')</label>
+              <input type="text" id="p-availability" class="form-input" placeholder="e.g. Available for new opportunities (Leave empty to hide)">
+            </div>
+
+            <div class="form-group">
+              <label for="p-about">Biography Summary</label>
+              <textarea id="p-about" class="form-input" required></textarea>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="form-group">
+                <label for="p-email">Email Address</label>
+                <input type="email" id="p-email" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="p-phone">Phone Number</label>
+                <input type="text" id="p-phone" class="form-input" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="p-location">Location Address</label>
+              <input type="text" id="p-location" class="form-input" required>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="form-group">
+                <label for="p-dob">Date of Birth</label>
+                <input type="text" id="p-dob" class="form-input" placeholder="e.g. 10/01/2005" required>
+              </div>
+              <div class="form-group">
+                <label for="p-marital">Marital Status</label>
+                <input type="text" id="p-marital" class="form-input" placeholder="e.g. Unmarried" required>
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="form-group">
+                <label for="p-nationality">Nationality</label>
+                <input type="text" id="p-nationality" class="form-input" placeholder="e.g. Indian" required>
+              </div>
+              <div class="form-group">
+                <label for="p-website">Personal Website URL</label>
+                <input type="url" id="p-website" class="form-input" required>
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="form-group">
+                <label for="p-linkedin">LinkedIn URL</label>
+                <input type="url" id="p-linkedin" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="p-github">GitHub Profile URL</label>
+                <input type="url" id="p-github" class="form-input" required>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Panel 2: Work History -->
+        <div class="admin-panel" id="panel-experience">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h3 class="admin-panel-title">Work Experience History</h3>
+              <p style="color: var(--text-secondary);">Manage your jobs, durations, companies, achievements, and tech stacks.</p>
+            </div>
+            <button class="btn-add-item" id="add-experience-btn">
+              <i class="fa-solid fa-plus"></i> Add Job
+            </button>
+          </div>
+          <div id="experience-list-container" class="list-editor-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Panel 3: Academics -->
+        <div class="admin-panel" id="panel-education">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h3 class="admin-panel-title">Academic Qualifications</h3>
+              <p style="color: var(--text-secondary);">Manage your school records, degrees, certificates, and scores.</p>
+            </div>
+            <button class="btn-add-item" id="add-education-btn">
+              <i class="fa-solid fa-plus"></i> Add School
+            </button>
+          </div>
+          <div id="education-list-container" class="list-editor-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Panel 4: Technical Skills -->
+        <div class="admin-panel" id="panel-skills">
+          <h3 class="admin-panel-title">Technical Competencies</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 20px;">Add categories (Languages, Tools, etc.) and specific skill ratings (0-100%).</p>
+          <div id="skills-list-container" class="list-editor-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Panel 5: Projects -->
+        <div class="admin-panel" id="panel-projects">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h3 class="admin-panel-title">Featured Projects Portfolio</h3>
+              <p style="color: var(--text-secondary);">Manage your projects, roles, tech stacks, and links.</p>
+            </div>
+            <button class="btn-add-item" id="add-project-btn">
+              <i class="fa-solid fa-plus"></i> Add Project
+            </button>
+          </div>
+          <div id="projects-list-container" class="list-editor-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Panel 6: Achievements -->
+        <div class="admin-panel" id="panel-achievements">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <h3 class="admin-panel-title">Awards & Achievements</h3>
+              <p style="color: var(--text-secondary);">List scholarships, honors, and specific metrics (e.g. 95% efficiency).</p>
+            </div>
+            <button class="btn-add-item" id="add-achievement-btn">
+              <i class="fa-solid fa-plus"></i> Add Award
+            </button>
+          </div>
+          <div id="achievements-list-container" class="list-editor-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+        
+      </section>
+    </div>
+  </main>
+  </div> <!-- End of admin-dashboard-wrapper -->
+
+  <!-- Admin Login Security Card (Visible when unauthenticated) -->
+  <div id="admin-login-wrapper" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; position: fixed; inset: 0; z-index: 3000; background: var(--bg-primary); padding: 20px;">
+    <div class="glass-card" style="max-width: 400px; width: 100%; padding: 40px; display: flex; flex-direction: column; gap: 25px; border-radius: var(--radius-md); box-shadow: var(--shadow-card); border: 1px solid var(--border-color); text-align: center; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px);">
+      <div class="bg-glow bg-glow-1" style="width: 150px; height: 150px; opacity: 0.15; position: absolute; top: -50px; right: -50px;"></div>
+      
+      <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid rgba(99, 102, 241, 0.2); margin: 0 auto;">
+        <i class="fa-solid fa-lock" id="login-lock-icon" style="transition: transform 0.3s ease;"></i>
+      </div>
+      
+      <div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0;">Admin Access</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px; margin-bottom: 0;">Sign in to customize your portfolio content.</p>
+      </div>
+      
+      <form id="login-form" style="display: flex; flex-direction: column; gap: 15px; text-align: left;">
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="login-username" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Username</label>
+          <input type="text" id="login-username" class="form-input" placeholder="Enter username" style="width: 100%;" required>
+        </div>
+        
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="login-password" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="Enter password" style="width: 100%;" required>
+        </div>
+        
+        <div id="login-error-msg" style="color: #ef4444; font-size: 0.85rem; display: none; text-align: center; font-weight: 600; margin-top: 5px;">
+          <i class="fa-solid fa-circle-exclamation"></i> Invalid credentials.
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: var(--radius-sm); padding: 12px; margin-top: 10px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+          Unlock Dashboard <i class="fa-solid fa-key"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Cropper Modal -->
+  <div id="cropper-modal" class="admin-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(8px);">
+    <div class="glass-card" style="max-width: 500px; width: 100%; display: flex; flex-direction: column; gap: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-card); padding: 30px; border-radius: var(--radius-md);">
+      <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; color: var(--text-primary); margin: 0;">Crop Profile Picture</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: -10px; margin-bottom: 0;">Select your desired circular profile boundary below.</p>
+      
+      <div class="cropper-wrapper" style="max-height: 300px; overflow: hidden; display: flex; justify-content: center; align-items: center; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #000;">
+        <img id="cropper-source-img" style="max-width: 100%; max-height: 280px; display: block;">
+      </div>
+      
+      <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 10px;">
+        <button type="button" class="btn btn-secondary" id="cropper-cancel-btn" style="border-radius: var(--radius-sm); padding: 8px 16px; font-size: 0.9rem;">Cancel</button>
+        <button type="button" class="btn btn-primary" id="cropper-save-btn" style="border-radius: var(--radius-sm); padding: 8px 16px; font-size: 0.9rem;"><i class="fa-solid fa-crop"></i> Crop & Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load resume data configurations -->
+  <script src="resume-data.js?v=12"></script>
+  <!-- Dashboard Controller Script -->
+  <script src="admin.js?v=12"></script>
+</body>
+</html>
