@@ -32,9 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const username = loginUsernameInput.value.trim();
       const password = loginPasswordInput.value;
 
-      // Dynamic local credentials check (defaulting to admin / admin123)
-      const savedUser = localStorage.getItem("adminUsername") || "admin";
-      const savedPass = localStorage.getItem("adminPassword") || "admin123";
+      // Dynamic local credentials check (defaulting to Mathesh99 / 123qweASD@#$)
+      const savedUser = localStorage.getItem("adminUsername") || "Mathesh99";
+      const savedPass = localStorage.getItem("adminPassword") || "123qweASD@#$";
 
       if (username === savedUser && password === savedPass) {
         sessionStorage.setItem("adminLoggedIn", "true");
@@ -1092,7 +1092,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
   if (settingsForm) {
     // Populate current username on loads
-    settingsUser.value = localStorage.getItem("adminUsername") || "admin";
+    settingsUser.value = localStorage.getItem("adminUsername") || "Mathesh99";
 
     settingsForm.addEventListener("submit", (e) => {
       e.preventDefault();
