@@ -1375,7 +1375,8 @@ footer {
     gap: 0 !important;
   }
 
-  header .nav-actions button {
+  header .nav-actions button,
+  #main-header .nav-actions button {
     flex-grow: 0 !important;
     flex-shrink: 0 !important;
     width: 40px !important;
@@ -1405,9 +1406,10 @@ footer {
   
   .nav-menu {
     position: absolute !important;
-    top: 78px !important;
-    left: 0 !important;
-    width: 100% !important;
+    top: 75px !important;
+    left: 10px !important;
+    right: 10px !important;
+    width: calc(100% - 20px) !important;
     background: var(--bg-glass) !important;
     backdrop-filter: blur(25px) !important;
     -webkit-backdrop-filter: blur(25px) !important;
@@ -1421,7 +1423,7 @@ footer {
     transform: translateY(-10px) !important;
     transition: var(--transition-smooth) !important;
     box-shadow: var(--shadow-card) !important;
-    z-index: 10000 !important;
+    z-index: 200000 !important;
   }
   
   .nav-menu.open {
@@ -1458,6 +1460,8 @@ footer {
   #hero {
     min-height: calc(100vh - 100px) !important;
     padding-top: 40px !important;
+    z-index: 1 !important;
+    position: relative !important;
   }
 
   .hero-wrapper {
@@ -1961,22 +1965,40 @@ footer {
 /* Responsive Overrides for Admin Panel */
 @media (max-width: 968px) {
   .admin-container {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding-top: 100px;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding-top: 20px !important;
   }
 
   .admin-sidebar {
-    position: static;
-    flex-direction: row;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
+    position: static !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    padding: 10px 5px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    gap: 10px !important;
+    scrollbar-width: none !important;
+  }
+
+  .admin-sidebar::-webkit-scrollbar {
+    display: none !important;
   }
 
   .admin-tab-btn {
-    white-space: nowrap;
-    width: auto;
+    white-space: nowrap !important;
+    width: auto !important;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    border-radius: 20px !important;
+  }
+  
+  .bullet-editor-row {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  
+  .bullet-editor-row input {
+    font-size: 0.85rem !important;
   }
 }
 
