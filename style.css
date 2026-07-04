@@ -1526,6 +1526,8 @@ footer {
   /* About additional details padding overrides */
   .about-additional-grid > div {
     padding: 20px !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--border-color) !important;
   }
 
   /* Mobile footer elements styling */
@@ -1533,6 +1535,95 @@ footer {
     flex-direction: column !important;
     gap: 12px !important;
     font-size: 0.85rem !important;
+  }
+
+  /* Premium mobile design details */
+  .timeline-card {
+    border-left: 3px solid var(--primary) !important;
+    background: rgba(17, 25, 40, 0.45) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .skill-bar-outer {
+    height: 6px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-radius: 10px !important;
+    border: none !important;
+    overflow: hidden !important;
+    margin-top: 6px !important;
+  }
+
+  [data-theme="light"] .skill-bar-outer {
+    background: rgba(0, 0, 0, 0.06) !important;
+  }
+
+  .skill-bar-inner {
+    height: 100% !important;
+    background: var(--gradient-primary) !important;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.3) !important;
+    border-radius: 10px !important;
+  }
+
+  .project-link {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 6px 14px !important;
+    border-radius: 30px !important;
+    font-size: 0.8rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: var(--transition-fast) !important;
+  }
+
+  [data-theme="light"] .project-link {
+    background: rgba(0, 0, 0, 0.02) !important;
+  }
+
+  .project-link:hover {
+    background: var(--gradient-primary) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+  }
+
+  .achievement-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 15px !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: rgba(17, 25, 40, 0.45) !important;
+  }
+
+  [data-theme="light"] .achievement-card {
+    background: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .achievement-icon {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.1rem !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(16, 185, 129, 0.08) !important;
+    color: var(--secondary) !important;
+    border: 1px solid rgba(16, 185, 129, 0.15) !important;
+  }
+
+  .hero-badge {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    color: var(--secondary) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.05) !important;
+    font-size: 0.8rem !important;
+    padding: 5px 12px !important;
+    border-radius: 30px !important;
   }
 }
 
