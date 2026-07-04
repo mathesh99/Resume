@@ -422,17 +422,28 @@ document.addEventListener("DOMContentLoaded", () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const id = entry.target.getAttribute("id");
-        navLinks.forEach(link => {
-          link.classList.remove("active");
-          if (link.getAttribute("href") === `#${id}`) {
-            link.classList.add("active");
-          }
-        });
+        // Verify this section actually has a corresponding navbar link
+        const targetLink = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (targetLink) {
+          navLinks.forEach(link => link.classList.remove("active"));
+          targetLink.classList.add("active");
+        }
       }
     });
-  }, { threshold: 0.25, rootMargin: "-10% 0px -60% 0px" });
+  }, { threshold: 0.15, rootMargin: "-25% 0px -35% 0px" }); // Central band mapping
 
   sections.forEach(section => navScrollObserver.observe(section));
+
+  // Auto-close mobile navigation menu when a link is clicked
+  navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      if (navMenu && navMenu.classList.contains("open")) {
+        navMenu.classList.remove("open");
+        const icon = mobileMenuBtn.querySelector("i");
+        if (icon) icon.className = "fa-solid fa-bars";
+      }
+    });
+  });
 
   /* ==========================================================================
      INTEGRATIONS & SUBMISSIONS
