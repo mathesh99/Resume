@@ -1201,9 +1201,8 @@ if (typeof module !== 'undefined' && module.exports) {
         const getResponse = await fetch(apiUrl, {
           method: "GET",
           headers: {
-            "Authorization": `token ${token}`,
-            "Accept": "application/vnd.github.v3+json",
-            "Cache-Control": "no-cache"
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/vnd.github.v3+json"
           }
         });
 
@@ -1233,7 +1232,7 @@ if (typeof module !== 'undefined' && module.exports) {
         const putResponse = await fetch(apiUrl, {
           method: "PUT",
           headers: {
-            "Authorization": `token ${token}`,
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
             "Accept": "application/vnd.github.v3+json"
           },
