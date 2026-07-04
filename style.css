@@ -1347,12 +1347,21 @@ footer {
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
+    transform: none !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 15px 10px !important;
-    z-index: 10000 !important;
+    padding: 10px 10px !important;
+    z-index: 100000 !important;
     border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 15px !important;
+    margin: 0 auto !important;
     box-sizing: border-box !important;
   }
 
