@@ -32,8 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const username = loginUsernameInput.value.trim();
       const password = loginPasswordInput.value;
 
-      // Default credentials (admin / admin123)
-      if (username === "admin" && password === "admin123") {
+      // Dynamic local credentials check (defaulting to admin / admin123)
+      const savedUser = localStorage.getItem("adminUsername") || "admin";
+      const savedPass = localStorage.getItem("adminPassword") || "admin123";
+
+      if (username === savedUser && password === savedPass) {
         sessionStorage.setItem("adminLoggedIn", "true");
         loginErrorMsg.style.display = "none";
         
@@ -64,6 +67,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Universal password visibility toggles
+  document.querySelectorAll(".toggle-password-visibility").forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const targetId = toggle.getAttribute("data-target");
+      const targetInput = document.getElementById(targetId);
+      if (targetInput) {
+        if (targetInput.type === "password") {
+          targetInput.type = "text";
+          toggle.classList.remove("fa-eye");
+          toggle.classList.add("fa-eye-slash");
+        } else {
+          targetInput.type = "password";
+          toggle.classList.remove("fa-eye-slash");
+          toggle.classList.add("fa-eye");
+        }
+      }
+    });
+  });
 
   // Read dataset checking localStorage first
   let data = window.resumeData;
@@ -994,5 +1016,51 @@ if (typeof module !== 'undefined' && module.exports) {
         feedback.style.display = "none";
       }, 5000);
     }
+  }
+
+  /* ==========================================================================
+     ACCESS SECURITY CREDENTIALS UPDATE FORM
+     ========================================================================== */
+  const settingsForm = document.getElementById("settings-form");
+  const settingsUser = document.getElementById("settings-username");
+  const settingsPass = document.getElementById("settings-password");
+  const settingsConfirm = document.getElementById("settings-confirm-password");
+
+  if (settingsForm) {
+    // Populate current username on loads
+    settingsUser.value = localStorage.getItem("adminUsername") || "admin";
+
+    settingsForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const userVal = settingsUser.value.trim();
+      const passVal = settingsPass.value;
+      const confirmVal = settingsConfirm.value;
+
+      if (!userVal) {
+        alert("Username cannot be blank!");
+        return;
+      }
+
+      if (passVal !== confirmVal) {
+        alert("New passwords do not match! Please check your entry.");
+        return;
+      }
+
+      if (passVal.length < 4) {
+        alert("Password must be at least 4 characters long!");
+        return;
+      }
+
+      // Save credentials locally
+      localStorage.setItem("adminUsername", userVal);
+      localStorage.setItem("adminPassword", passVal);
+
+      // Clear input fields
+      settingsPass.value = "";
+      settingsConfirm.value = "";
+
+      showStatus("Admin access credentials updated successfully!", "success");
+    });
   }
 });
