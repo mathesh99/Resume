@@ -79,6 +79,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 110px; /* Offset for the sticky header */
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -256,7 +257,7 @@ header {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
+  width: calc(100% - 60px);
   max-width: var(--max-width);
   height: 70px;
   z-index: 1000;
