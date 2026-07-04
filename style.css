@@ -1354,7 +1354,7 @@ footer {
     border-radius: var(--radius-md);
     flex-direction: column;
     padding: 25px;
-    gap: 15px;
+    gap: 12px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-15px);
@@ -1367,6 +1367,26 @@ footer {
     visibility: visible;
     transform: translateY(0);
   }
+
+  .nav-menu .nav-link {
+    width: 100%;
+    padding: 12px !important;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    font-size: 0.95rem;
+  }
+
+  [data-theme="light"] .nav-menu .nav-link {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .nav-menu .nav-link.active {
+    background: var(--gradient-primary) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+  }
   
   .form-row {
     grid-template-columns: 1fr;
@@ -1376,6 +1396,18 @@ footer {
   #hero {
     min-height: calc(100vh - 100px) !important;
     padding-top: 90px !important;
+  }
+
+  .hero-wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+    text-align: center !important;
+  }
+
+  /* Display Avatar at the TOP on mobile */
+  .hero-visual {
+    order: -1 !important;
+    margin: 0 auto !important;
   }
 
   .hero-title {
@@ -1437,13 +1469,59 @@ footer {
     font-size: 0.95rem !important;
   }
 
+  /* Inline horizontal layouts for timeline badges */
+  .timeline-date-location {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px 12px !important;
+    margin-top: 8px !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+
   .timeline-date {
     font-size: 0.8rem !important;
     padding: 2px 8px !important;
+    margin: 0 !important;
   }
 
   .timeline-location {
     font-size: 0.8rem !important;
+    margin: 0 !important;
+  }
+
+  .timeline-card .tech-tag {
+    margin: 0 !important;
+  }
+
+  /* Horizontal Scrolling for Project Filters on mobile */
+  .projects-toolbar {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 8px !important;
+    gap: 8px !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .projects-toolbar::-webkit-scrollbar {
+    display: none !important; /* Hide scrollbar */
+  }
+
+  .filter-btn {
+    flex-shrink: 0 !important;
+    padding: 6px 14px !important;
+    font-size: 0.82rem !important;
+  }
+
+  /* About additional details padding overrides */
+  .about-additional-grid > div {
+    padding: 20px !important;
   }
 
   /* Mobile footer elements styling */
