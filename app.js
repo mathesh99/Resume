@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
      THEME INITIALIZATION & CONTROL
      ========================================================================== */
   const themeToggle = document.getElementById("theme-toggle");
-  const currentTheme = localStorage.getItem("theme") || "dark";
+  const currentTheme = localStorage.getItem("theme") || "light";
   
   // Apply initial theme
   document.documentElement.setAttribute("data-theme", currentTheme);

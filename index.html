@@ -18,7 +18,7 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=24">
 </head>
 <body>
 
@@ -33,11 +33,11 @@
     
     <nav class="nav-menu" id="nav-menu">
       <a href="#about" class="nav-link" id="nav-link-about">About</a>
+      <a href="#projects" class="nav-link" id="nav-link-projects">Projects</a>
       <a href="#experience" class="nav-link" id="nav-link-experience">Experience</a>
       <a href="#education" class="nav-link" id="nav-link-education">Education</a>
       <a href="#achievements" class="nav-link" id="nav-link-achievements">Achievements</a>
       <a href="#skills" class="nav-link" id="nav-link-skills">Skills</a>
-      <a href="#projects" class="nav-link" id="nav-link-projects">Projects</a>
       <button class="btn btn-secondary mobile-only-pdf-btn" id="mobile-pdf-export-btn" style="padding: 12px; font-size: 0.95rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.03); color: var(--text-primary); cursor: pointer; width: 100%; align-items: center; justify-content: center; gap: 8px; margin-top: 5px;">
         <i class="fa-solid fa-file-pdf"></i> Export PDF
       </button>
@@ -171,6 +171,24 @@
       </div>
     </section>
 
+    <!-- Projects Portfolio Section -->
+    <section id="projects">
+      <div class="section-header">
+        <h2 class="section-title" id="projects-section-heading">Featured Projects</h2>
+        <p class="section-subtitle" id="projects-section-subtitle">Open-source contributions, software engineering systems, and live tools</p>
+      </div>
+      
+      <!-- Filter Toolbar -->
+      <div class="projects-toolbar" id="projects-filter-bar">
+        <button class="filter-btn active" data-filter="all" id="filter-btn-all">All Projects</button>
+        <!-- Categories will be generated dynamically -->
+      </div>
+      
+      <div class="projects-grid" id="projects-listing-grid">
+        <!-- Dynamic project cards inserted here -->
+      </div>
+    </section>
+
     <!-- Experience Section -->
     <section id="experience">
       <div class="section-header">
@@ -222,23 +240,7 @@
       </div>
     </section>
 
-    <!-- Projects Portfolio Section -->
-    <section id="projects">
-      <div class="section-header">
-        <h2 class="section-title" id="projects-section-heading">Featured Projects</h2>
-        <p class="section-subtitle" id="projects-section-subtitle">Open-source contributions, software engineering systems, and live tools</p>
-      </div>
-      
-      <!-- Filter Toolbar -->
-      <div class="projects-toolbar" id="projects-filter-bar">
-        <button class="filter-btn active" data-filter="all" id="filter-btn-all">All Projects</button>
-        <!-- Categories will be generated dynamically -->
-      </div>
-      
-      <div class="projects-grid" id="projects-listing-grid">
-        <!-- Dynamic project cards inserted here -->
-      </div>
-    </section>
+
 
   </main>
 
