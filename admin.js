@@ -1013,11 +1013,14 @@ if (typeof module !== 'undefined' && module.exports) {
             parsedData = JSON.parse(content);
           } catch (jsonErr) {
             // If JSON fails, it might be an exported JS file.
-            // Search for first '{' and last '}'
-            const startIdx = content.indexOf("{");
-            const endIdx = content.lastIndexOf("}");
+            // Isolate everything before the export definitions to avoid matching JS block brackets
+            const parts = content.split("// Export data");
+            const dataPart = parts[0];
+
+            const startIdx = dataPart.indexOf("{");
+            const endIdx = dataPart.lastIndexOf("}");
             if (startIdx !== -1 && endIdx !== -1) {
-              const jsonSubstring = content.substring(startIdx, endIdx + 1);
+              const jsonSubstring = dataPart.substring(startIdx, endIdx + 1);
               parsedData = JSON.parse(jsonSubstring);
             } else {
               throw new Error("Could not find resume data object inside the selected file.");
