@@ -1332,10 +1332,13 @@ footer {
 
 @media (max-width: 768px) {
   header {
-    padding: 10px 15px !important;
+    padding: 10px 20px !important;
     height: 70px !important;
     border-radius: 12px !important;
     top: 8px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
   }
   
   .mobile-menu-btn {
@@ -1343,23 +1346,24 @@ footer {
   }
   
   .nav-menu {
-    position: fixed;
-    top: 75px;
-    left: 4%;
-    width: 92%;
-    background: var(--bg-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    flex-direction: column;
-    padding: 25px;
-    gap: 12px;
+    position: absolute !important;
+    top: 78px !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: var(--bg-glass) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    flex-direction: column !important;
+    padding: 25px !important;
+    gap: 12px !important;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-15px);
-    transition: var(--transition-smooth);
-    box-shadow: var(--shadow-card);
+    transform: translateY(-10px) !important;
+    transition: var(--transition-smooth) !important;
+    box-shadow: var(--shadow-card) !important;
+    z-index: 10000 !important;
   }
   
   .nav-menu.open {
