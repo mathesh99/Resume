@@ -1332,7 +1332,10 @@ footer {
 
 @media (max-width: 768px) {
   header {
-    padding: 0 20px;
+    padding: 10px 15px !important;
+    height: 70px !important;
+    border-radius: 12px !important;
+    top: 8px !important;
   }
   
   .mobile-menu-btn {
@@ -1341,22 +1344,22 @@ footer {
   
   .nav-menu {
     position: fixed;
-    top: 90px;
-    left: 5%;
-    width: 90%;
-    background: var(--bg-card);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    top: 75px;
+    left: 4%;
+    width: 92%;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     flex-direction: column;
-    padding: 30px;
-    gap: 20px;
+    padding: 25px;
+    gap: 15px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-20px);
+    transform: translateY(-15px);
     transition: var(--transition-smooth);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-card);
   }
   
   .nav-menu.open {
@@ -1367,6 +1370,87 @@ footer {
   
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  /* Dedicated Mobile View Styles */
+  #hero {
+    min-height: calc(100vh - 100px) !important;
+    padding-top: 90px !important;
+  }
+
+  .hero-title {
+    font-size: 2.2rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem !important;
+  }
+
+  .hero-desc {
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Center the hero details */
+  .hero-content {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .hero-actions {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .hero-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Save mobile space on timeline */
+  .timeline {
+    padding-left: 20px !important;
+  }
+
+  .timeline::before {
+    left: 4px !important;
+  }
+
+  .timeline-dot {
+    left: -26px !important;
+    width: 10.5px !important;
+    height: 10.5px !important;
+    border-width: 2px !important;
+  }
+
+  .timeline-card {
+    padding: 20px !important;
+    gap: 10px !important;
+  }
+
+  .timeline-role {
+    font-size: 1.15rem !important;
+  }
+
+  .timeline-company {
+    font-size: 0.95rem !important;
+  }
+
+  .timeline-date {
+    font-size: 0.8rem !important;
+    padding: 2px 8px !important;
+  }
+
+  .timeline-location {
+    font-size: 0.8rem !important;
+  }
+
+  /* Mobile footer elements styling */
+  .footer-contact-info {
+    flex-direction: column !important;
+    gap: 12px !important;
+    font-size: 0.85rem !important;
   }
 }
 
