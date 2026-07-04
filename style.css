@@ -1244,6 +1244,10 @@ footer {
     padding: 80px 0 40px 0;
   }
   
+  .container {
+    padding: 0 20px;
+  }
+  
   .hero-wrapper {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -1295,6 +1299,33 @@ footer {
   
   .contact-form-card {
     order: 1;
+  }
+
+  /* Admin Header Mobile Overrides */
+  #main-header {
+    flex-direction: column !important;
+    padding: 20px !important;
+    height: auto !important;
+    gap: 15px !important;
+    align-items: center !important;
+    position: static !important;
+    border-radius: var(--radius-sm) !important;
+    margin-bottom: 20px !important;
+  }
+
+  #main-header .nav-actions {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  #main-header .nav-actions button,
+  #main-header .nav-actions a {
+    flex-grow: 1 !important;
+    text-align: center !important;
+    justify-content: center !important;
+    font-size: 0.8rem !important;
   }
 }
 
@@ -1348,12 +1379,12 @@ footer {
   }
   
   .avatar-container {
-    width: 250px;
-    height: 250px;
+    width: 180px;
+    height: 180px;
   }
   
   .avatar-initials {
-    font-size: 5rem;
+    font-size: 3.5rem;
   }
   
   .section-title {
