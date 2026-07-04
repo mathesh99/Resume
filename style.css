@@ -1337,13 +1337,7 @@ footer {
 
 @media (max-width: 768px) {
   header {
-    padding: 10px 20px !important;
-    height: 70px !important;
-    border-radius: 12px !important;
-    top: 8px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
+    display: none !important;
   }
   
   .mobile-menu-btn {
@@ -1404,7 +1398,7 @@ footer {
   /* Dedicated Mobile View Styles */
   #hero {
     min-height: calc(100vh - 100px) !important;
-    padding-top: 90px !important;
+    padding-top: 40px !important;
   }
 
   .hero-wrapper {
