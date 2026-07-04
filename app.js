@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const personalDetails = [
     { label: "Role", value: data.personal.title },
     { label: "Location", value: data.personal.location },
+    { label: "Mobile", value: `<a href="tel:${data.personal.phone}" style="color: var(--primary);">${data.personal.phone}</a>` },
     { label: "Email", value: `<a href="mailto:${data.personal.email}" style="color: var(--primary);">${data.personal.email}</a>` },
     { label: "Website", value: `<a href="${data.personal.website}" target="_blank" rel="noopener">${data.personal.website.replace("https://", "")}</a>` },
     { label: "DOB", value: data.personal.birthDate || "" },
