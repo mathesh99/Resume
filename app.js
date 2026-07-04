@@ -39,18 +39,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileMenuBtn = document.getElementById("mobile-menu-btn");
   const navMenu = document.getElementById("nav-menu");
   
-  mobileMenuBtn.addEventListener("click", () => {
+  mobileMenuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
     navMenu.classList.toggle("open");
     const isOpen = navMenu.classList.contains("open");
-    mobileMenuBtn.querySelector("i").className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+    mobileMenuBtn.querySelector("i").className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-ellipsis-vertical";
   });
 
   // Close mobile menu when clicking on any nav link
   document.querySelectorAll(".nav-link").forEach(link => {
     link.addEventListener("click", () => {
       navMenu.classList.remove("open");
-      mobileMenuBtn.querySelector("i").className = "fa-solid fa-bars";
+      mobileMenuBtn.querySelector("i").className = "fa-solid fa-ellipsis-vertical";
     });
+  });
+
+  // Close menu when tapping anywhere outside the nav
+  document.addEventListener("click", (e) => {
+    if (navMenu.classList.contains("open") &&
+        !navMenu.contains(e.target) &&
+        !mobileMenuBtn.contains(e.target)) {
+      navMenu.classList.remove("open");
+      mobileMenuBtn.querySelector("i").className = "fa-solid fa-ellipsis-vertical";
+    }
   });
 
   // Sticky header class on scroll
