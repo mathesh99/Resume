@@ -1,11 +1,20 @@
 // Resume & Portfolio Controller Application
 document.addEventListener("DOMContentLoaded", () => {
-  // Read from localStorage if custom data is present, otherwise fallback to resume-data.js
+  // Read dataset checking localStorage vs resume-data.js
   let data = window.resumeData;
   const localResumeData = localStorage.getItem("customResumeData");
   if (localResumeData) {
     try {
-      data = JSON.parse(localResumeData);
+      const parsedLocal = JSON.parse(localResumeData);
+      const remoteTime = window.resumeData?.updatedAt || 0;
+      const localTime = parsedLocal?.updatedAt || 0;
+      // If live resume-data.js has a newer or matching timestamp, adopt the fresh GitHub data
+      if (remoteTime && remoteTime >= localTime) {
+        data = window.resumeData;
+        localStorage.setItem("customResumeData", JSON.stringify(data));
+      } else {
+        data = parsedLocal;
+      }
     } catch (e) {
       console.error("Failed to parse custom resume data from localStorage, using default.", e);
     }

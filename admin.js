@@ -112,12 +112,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Read dataset checking localStorage first
+  // Read dataset checking localStorage vs resume-data.js
   let data = window.resumeData;
   const localResumeData = localStorage.getItem("customResumeData");
   if (localResumeData) {
     try {
-      data = JSON.parse(localResumeData);
+      const parsedLocal = JSON.parse(localResumeData);
+      const remoteTime = window.resumeData?.updatedAt || 0;
+      const localTime = parsedLocal?.updatedAt || 0;
+      // If resume-data.js from code/remote is newer than local browser storage, adopt remote
+      if (remoteTime && remoteTime >= localTime) {
+        data = window.resumeData;
+        localStorage.setItem("customResumeData", JSON.stringify(data));
+      } else {
+        data = parsedLocal;
+      }
     } catch (e) {
       console.error("Failed to parse custom resume data from localStorage, using default.", e);
     }
@@ -982,6 +991,7 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================================================================== */
   const serializeResumeState = () => {
     const state = {};
+    state.updatedAt = Date.now();
 
     // 1. Personal details
     state.personal = {
@@ -1406,12 +1416,14 @@ if (typeof module !== 'undefined' && module.exports) {
         const targetFilePath = "resume-data.js";
         const apiUrl = `https://api.github.com/repos/${repo}/contents/${targetFilePath}`;
 
-        // 2. Fetch the target file's current SHA from GitHub API
-        const getResponse = await fetch(apiUrl, {
+        // 2. Fetch the target file's current SHA from GitHub API (cache: "no-store" + timestamp prevents 409 SHA conflicts)
+        const getResponse = await fetch(`${apiUrl}?_=${Date.now()}`, {
           method: "GET",
+          cache: "no-store",
           headers: {
             "Authorization": `Bearer ${token}`,
-            "Accept": "application/vnd.github.v3+json"
+            "Accept": "application/vnd.github.v3+json",
+            "Cache-Control": "no-cache, no-store, must-revalidate"
           }
         });
 
@@ -1457,7 +1469,12 @@ if (typeof module !== 'undefined' && module.exports) {
           throw new Error(errData.message || "Failed to update file content on GitHub.");
         }
 
-        showStatus("Successfully synchronized data back to GitHub! Pages deployment started. Live in 30 seconds.", "success");
+        // Keep local in-memory and browser storage in sync with what was just committed
+        data = state;
+        window.resumeData = state;
+        localStorage.setItem("customResumeData", JSON.stringify(state));
+
+        showStatus("Successfully synchronized data back to GitHub! Pages deployment started. Live in 30-45 seconds.", "success");
         alert("Successfully synchronized! GitHub Pages will rebuild. The changes will be live globally in 30-45 seconds!");
 
       } catch (err) {
@@ -1468,5 +1485,62 @@ if (typeof module !== 'undefined' && module.exports) {
         githubSyncBtn.innerHTML = originalHtml;
       }
     });
+  }
+
+  // Pull latest published configuration from GitHub repository
+  const pullLatestFromGitHub = async () => {
+    const repo = localStorage.getItem("githubRepo") || "mathesh99/Resume";
+    const token = localStorage.getItem("githubToken");
+
+    showStatus("Fetching latest resume-data.js from GitHub...", "success");
+
+    try {
+      const headers = {
+        "Accept": "application/vnd.github.v3+json",
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`https://api.github.com/repos/${repo}/contents/resume-data.js?_=${Date.now()}`, {
+        method: "GET",
+        cache: "no-store",
+        headers
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Failed to fetch from GitHub (Status ${res.status})`);
+      }
+
+      const fileData = await res.json();
+      const binaryString = atob(fileData.content.replace(/\s/g, ""));
+      const utf8Bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+      const textContent = new TextDecoder().decode(utf8Bytes);
+
+      const startIdx = textContent.indexOf("{");
+      const endIdx = textContent.lastIndexOf("}");
+      if (startIdx === -1 || endIdx === -1) {
+        throw new Error("Could not find valid resumeData JSON in remote file.");
+      }
+      const parsed = JSON.parse(textContent.slice(startIdx, endIdx + 1));
+
+      data = parsed;
+      window.resumeData = parsed;
+      localStorage.setItem("customResumeData", JSON.stringify(parsed));
+      loadDatabase();
+
+      showStatus("Successfully loaded latest changes from GitHub!", "success");
+      alert("Successfully loaded the latest data from GitHub! All forms updated.");
+    } catch (err) {
+      showStatus("Failed to pull from GitHub: " + err.message, "error");
+      alert("Could not pull from GitHub: " + err.message);
+    }
+  };
+
+  const githubPullBtn = document.getElementById("github-pull-btn");
+  if (githubPullBtn) {
+    githubPullBtn.addEventListener("click", pullLatestFromGitHub);
   }
 });
