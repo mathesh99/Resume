@@ -1,5 +1,6 @@
 // Personal Portfolio and Resume Data - Mathesh Nadar
 const resumeData = {
+  "updatedAt": 1794508352226,
   "personal": {
     "name": "Mathesh Nadar",
     "title": "AI & Data Science Engineer",
