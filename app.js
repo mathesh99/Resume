@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const experienceTimeline = document.getElementById("experience-timeline");
   experienceTimeline.innerHTML = data.experience.map(exp => {
     const certLink = exp.certificate ? `
-      <a href="${exp.certificate}" target="_blank" rel="noopener" class="tech-tag" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); color: var(--accent); display: inline-flex; align-items: center; gap: 4px; margin-left: 10px;">
+      <a href="${exp.certificate}" target="_blank" rel="noopener" class="tech-tag timeline-cert-link" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); color: var(--accent); display: inline-flex; align-items: center; gap: 4px;">
         <i class="fa-solid fa-certificate"></i> View Certificate
       </a>
     ` : "";
@@ -176,7 +176,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="timeline-meta">
             <div class="timeline-title-group">
               <h3 class="timeline-role">${exp.role}</h3>
-              <span class="timeline-company">${exp.company}${certLink}</span>
+              <div class="timeline-company-row">
+                <span class="timeline-company">${exp.company}</span>${certLink}
+              </div>
             </div>
             <div class="timeline-date-location">
               <span class="timeline-date">${exp.duration}</span>
@@ -196,14 +198,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 4. Education Timeline Section
   const educationTimeline = document.getElementById("education-timeline");
-  educationTimeline.innerHTML = data.education.map(edu => {
+  educationTimeline.innerHTML = data.education.map((edu, eduIdx) => {
     const semestersList = edu.semesters && edu.semesters.length > 0 ? `
-      <div class="education-semesters" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
-        ${edu.semesters.map(sem => `
-          <span class="tech-tag" style="background: rgba(99, 102, 241, 0.04); border-color: rgba(99, 102, 241, 0.12); color: var(--text-secondary); font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-color);">
-            <strong>${sem.name}:</strong> ${sem.gpa}
-          </span>
-        `).join("")}
+      <div class="education-semesters">
+        ${edu.semesters.map((sem, semIdx) => {
+          const hasMarksheet = Boolean(sem.marksheet && String(sem.marksheet).trim());
+          if (hasMarksheet) {
+            return `
+              <button type="button" class="tech-tag semester-chip has-marksheet" data-edu-idx="${eduIdx}" data-sem-idx="${semIdx}" title="Click to preview & download marksheet">
+                <span><strong>${sem.name}:</strong> ${sem.gpa}</span>
+                <i class="fa-regular fa-file-image sem-marksheet-icon" aria-hidden="true"></i>
+              </button>
+            `;
+          }
+          return `
+            <span class="tech-tag semester-chip">
+              <strong>${sem.name}:</strong> ${sem.gpa}
+            </span>
+          `;
+        }).join("")}
       </div>
     ` : "";
 
@@ -542,4 +555,118 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 1200);
     });
   }
+
+  // Semester Marksheet Preview & Download Modal
+  const marksheetModal = document.getElementById("marksheet-modal");
+  const marksheetBackdrop = document.getElementById("marksheet-modal-backdrop");
+  const marksheetTitle = document.getElementById("marksheet-modal-title");
+  const marksheetSubtitle = document.getElementById("marksheet-modal-subtitle");
+  const marksheetImg = document.getElementById("marksheet-preview-img");
+  const marksheetError = document.getElementById("marksheet-error-msg");
+  const marksheetDownloadBtn = document.getElementById("marksheet-download-btn");
+  const marksheetCloseBtn = document.getElementById("marksheet-close-btn");
+  const marksheetDismissBtn = document.getElementById("marksheet-dismiss-btn");
+
+  const getMarksheetExtension = (src) => {
+    const dataMatch = /^data:image\/([a-zA-Z0-9+.-]+);/i.exec(src);
+    if (dataMatch) {
+      const sub = dataMatch[1].toLowerCase();
+      if (sub === "jpeg") return "jpg";
+      if (sub.includes("svg")) return "svg";
+      return sub;
+    }
+    const urlMatch = /\.([a-zA-Z0-9]{2,5})(?:[?#]|$)/.exec(src);
+    return urlMatch ? urlMatch[1].toLowerCase() : "jpg";
+  };
+
+  const closeMarksheetModal = () => {
+    if (!marksheetModal || marksheetModal.hidden) return;
+    marksheetModal.hidden = true;
+    document.body.classList.remove("modal-open");
+    if (marksheetImg) marksheetImg.removeAttribute("src");
+  };
+
+  const openMarksheetModal = (sem, edu) => {
+    if (!marksheetModal || !sem || !sem.marksheet) return;
+    const src = String(sem.marksheet).trim();
+    const ext = getMarksheetExtension(src);
+    const ownerSlug = (data.personal?.name || "Student").trim().replace(/\s+/g, "_");
+    const semSlug = String(sem.name || "Semester").trim().replace(/[^a-zA-Z0-9]+/g, "_");
+    const filename = `${ownerSlug}_${semSlug}_Marksheet.${ext}`;
+
+    if (marksheetTitle) marksheetTitle.textContent = `${sem.name} Marksheet`;
+    if (marksheetSubtitle) {
+      marksheetSubtitle.textContent = `GPA: ${sem.gpa}${edu?.degree ? ` • ${edu.degree}` : ""}`;
+    }
+    if (marksheetError) marksheetError.hidden = true;
+    if (marksheetImg) {
+      marksheetImg.hidden = false;
+      marksheetImg.alt = `${sem.name} Marksheet`;
+      marksheetImg.onerror = () => {
+        marksheetImg.hidden = true;
+        if (marksheetError) marksheetError.hidden = false;
+      };
+      marksheetImg.src = src;
+    }
+    if (marksheetDownloadBtn) {
+      marksheetDownloadBtn.href = src;
+      marksheetDownloadBtn.download = filename;
+      marksheetDownloadBtn.dataset.marksheetSrc = src;
+      marksheetDownloadBtn.dataset.marksheetFilename = filename;
+    }
+
+    marksheetModal.hidden = false;
+    document.body.classList.add("modal-open");
+    if (marksheetCloseBtn) marksheetCloseBtn.focus();
+  };
+
+  if (educationTimeline) {
+    educationTimeline.addEventListener("click", (e) => {
+      const chip = e.target.closest(".semester-chip.has-marksheet");
+      if (!chip) return;
+      const eduIdx = parseInt(chip.dataset.eduIdx, 10);
+      const semIdx = parseInt(chip.dataset.semIdx, 10);
+      const edu = data.education?.[eduIdx];
+      const sem = edu?.semesters?.[semIdx];
+      if (sem && sem.marksheet) {
+        openMarksheetModal(sem, edu);
+      }
+    });
+  }
+
+  if (marksheetDownloadBtn) {
+    marksheetDownloadBtn.addEventListener("click", async (e) => {
+      const src = marksheetDownloadBtn.dataset.marksheetSrc || "";
+      const filename = marksheetDownloadBtn.dataset.marksheetFilename || "marksheet.jpg";
+      if (!src || src.startsWith("data:")) return;
+
+      // Cross-origin URLs ignore the <a download> attribute unless fetched into a local Blob URL
+      e.preventDefault();
+      try {
+        const res = await fetch(src);
+        if (!res.ok) throw new Error("Network response was not ok");
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const tempLink = document.createElement("a");
+        tempLink.href = blobUrl;
+        tempLink.download = filename;
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      } catch {
+        window.open(src, "_blank", "noopener");
+      }
+    });
+  }
+
+  [marksheetCloseBtn, marksheetDismissBtn, marksheetBackdrop].forEach(el => {
+    if (el) el.addEventListener("click", closeMarksheetModal);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && marksheetModal && !marksheetModal.hidden) {
+      closeMarksheetModal();
+    }
+  });
 });

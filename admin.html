@@ -10,12 +10,12 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="style.css?v=31">
   <!-- Cropper.js Image Cropping Tool CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 </head>
-<body>
+<body class="admin-page">
 
   <!-- Decorative glow items -->
   <div class="bg-glow bg-glow-1"></div>
@@ -24,46 +24,60 @@
   <!-- Dashboard Wrapper (Only visible when authenticated) -->
   <div id="admin-dashboard-wrapper" style="display: none;">
     <!-- Header with action actions -->
-    <header id="main-header" style="justify-content: space-between; padding: 0 40px; border-radius: 20px; top: 15px;">
-    <span class="logo">MN.admin</span>
-    
-    <div class="nav-actions">
-      <!-- Dark/Light Theme Toggle -->
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" style="margin-right: 5px;">
-        <i class="fa-solid fa-moon"></i>
-        <i class="fa-solid fa-sun"></i>
-      </button>
-      <!-- Back to Portfolio -->
-      <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px;">
-        <i class="fa-solid fa-arrow-left"></i> View Portfolio
-      </a>
-      <!-- Save to Browser -->
-      <button class="btn btn-primary" id="save-local-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px;">
-        <i class="fa-solid fa-cloud-arrow-up"></i> Save to Browser
-      </button>
-      <!-- Sync to GitHub -->
-      <button class="btn btn-primary" id="github-sync-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; background: var(--gradient-secondary); box-shadow: 0 0 20px rgba(16, 185, 129, 0.25); border: none;">
-        <i class="fa-solid fa-rotate"></i> Sync to GitHub
-      </button>
-      <!-- Import configuration file -->
-      <button class="btn btn-secondary" id="export-file-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; background: rgba(99, 102, 241, 0.1); border-color: var(--primary); color: var(--primary);">
-        <i class="fa-solid fa-file-export"></i> Export File
-      </button>
-      <!-- Import configuration file -->
-      <button class="btn btn-secondary" id="import-file-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; background: rgba(16, 185, 129, 0.1); border-color: var(--secondary); color: var(--secondary);">
-        <i class="fa-solid fa-file-import"></i> Import File
-      </button>
-      <input type="file" id="import-file-input" accept=".js,.json" style="display: none;">
-      <!-- Logout -->
-      <button class="btn btn-secondary" id="logout-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; border-color: rgba(239, 68, 68, 0.3); color: #ef4444; margin-left: 5px;">
-        <i class="fa-solid fa-right-from-bracket"></i> Logout
-      </button>
-      <!-- Reset edits -->
-      <button class="btn btn-secondary" id="reset-data-btn" style="padding: 8px 16px; font-size: 0.85rem; border-radius: 20px; border-color: rgba(239, 68, 68, 0.3); color: #ef4444;">
-        <i class="fa-solid fa-rotate-left"></i> Reset Defaults
-      </button>
-    </div>
-  </header>
+    <header id="main-header" class="admin-header">
+      <div class="admin-header-top">
+        <span class="logo">MN.admin</span>
+        <div class="admin-header-mini-controls">
+          <!-- Dark/Light Theme Toggle -->
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+            <i class="fa-solid fa-moon"></i>
+            <i class="fa-solid fa-sun"></i>
+          </button>
+          <!-- Mobile Actions Drawer Toggle -->
+          <button type="button" class="admin-menu-toggle" id="admin-menu-toggle" aria-label="Toggle more admin actions" aria-expanded="false">
+            <i class="fa-solid fa-bars"></i>
+            <span>Menu</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-actions admin-nav-actions" id="admin-nav-actions">
+        <div class="admin-primary-actions">
+          <!-- Save to Browser -->
+          <button class="btn btn-primary admin-action-btn" id="save-local-btn">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Save to Browser
+          </button>
+          <!-- Sync to GitHub -->
+          <button class="btn btn-primary admin-action-btn admin-sync-btn" id="github-sync-btn">
+            <i class="fa-solid fa-rotate"></i> Sync to GitHub
+          </button>
+        </div>
+
+        <div class="admin-secondary-actions" id="admin-secondary-actions">
+          <!-- Back to Portfolio -->
+          <a href="index.html" class="btn btn-secondary admin-action-btn">
+            <i class="fa-solid fa-arrow-left"></i> View Portfolio
+          </a>
+          <!-- Export configuration file -->
+          <button class="btn btn-secondary admin-action-btn admin-export-btn" id="export-file-btn">
+            <i class="fa-solid fa-file-export"></i> Export File
+          </button>
+          <!-- Import configuration file -->
+          <button class="btn btn-secondary admin-action-btn admin-import-btn" id="import-file-btn">
+            <i class="fa-solid fa-file-import"></i> Import File
+          </button>
+          <input type="file" id="import-file-input" accept=".js,.json" style="display: none;">
+          <!-- Logout -->
+          <button class="btn btn-secondary admin-action-btn admin-danger-btn" id="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+          <!-- Reset edits -->
+          <button class="btn btn-secondary admin-action-btn admin-danger-btn" id="reset-data-btn">
+            <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+          </button>
+        </div>
+      </div>
+    </header>
 
   <main class="container">
     <div class="admin-container">
@@ -97,8 +111,8 @@
       </aside>
 
       <!-- Right contents editor panels -->
-      <section class="glass-card admin-content-wrapper" style="flex-grow: 1; padding: 40px; min-height: 550px;">
-        <div id="admin-status-message" class="form-status" style="margin-bottom: 25px; display: none;"></div>
+      <section class="glass-card admin-content-wrapper">
+        <div id="admin-status-message" class="form-status" style="margin-bottom: 20px; display: none;"></div>
         
         <!-- Panel 1: Personal Info -->
         <div class="admin-panel active" id="panel-personal">
@@ -209,7 +223,7 @@
 
         <!-- Panel 2: Work History -->
         <div class="admin-panel" id="panel-experience">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div class="admin-panel-header">
             <div>
               <h3 class="admin-panel-title">Work Experience History</h3>
               <p style="color: var(--text-secondary);">Manage your jobs, durations, companies, achievements, and tech stacks.</p>
@@ -225,7 +239,7 @@
 
         <!-- Panel 3: Academics -->
         <div class="admin-panel" id="panel-education">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div class="admin-panel-header">
             <div>
               <h3 class="admin-panel-title">Academic Qualifications</h3>
               <p style="color: var(--text-secondary);">Manage your school records, degrees, certificates, and scores.</p>
@@ -250,7 +264,7 @@
 
         <!-- Panel 5: Projects -->
         <div class="admin-panel" id="panel-projects">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div class="admin-panel-header">
             <div>
               <h3 class="admin-panel-title">Featured Projects Portfolio</h3>
               <p style="color: var(--text-secondary);">Manage your projects, roles, tech stacks, and links.</p>
@@ -266,7 +280,7 @@
 
         <!-- Panel 6: Achievements -->
         <div class="admin-panel" id="panel-achievements">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div class="admin-panel-header">
             <div>
               <h3 class="admin-panel-title">Awards & Achievements</h3>
               <p style="color: var(--text-secondary);">List scholarships, honors, and specific metrics (e.g. 95% efficiency).</p>
@@ -307,7 +321,7 @@
               </div>
             </div>
             
-            <button type="submit" class="btn btn-primary" style="align-self: flex-start; padding: 10px 24px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;">
+            <button type="submit" class="btn btn-primary admin-submit-btn" style="align-self: flex-start; padding: 10px 24px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;">
               <i class="fa-solid fa-shield-halved"></i> Update Credentials
             </button>
           </form>
@@ -320,7 +334,7 @@
             <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 5px;">Connect your admin page directly to your GitHub repository. Once set up, clicking <strong>Sync to GitHub</strong> in the header will instantly update your live portfolio globally for everyone.</p>
           </div>
           
-          <form id="github-sync-form" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+          <form id="github-sync-form" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px; width: 100%;">
             <div class="form-group">
               <label for="github-repo">GitHub Repository Path</label>
               <input type="text" id="github-repo" class="form-input" placeholder="username/repository (e.g., mathesh99/Resume)" required>
@@ -338,7 +352,7 @@
               </span>
             </div>
             
-            <button type="submit" class="btn btn-primary" style="align-self: flex-start; padding: 10px 24px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;">
+            <button type="submit" class="btn btn-primary admin-submit-btn" style="align-self: flex-start; padding: 10px 24px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;">
               <i class="fa-solid fa-floppy-disk"></i> Save GitHub Config
             </button>
           </form>
@@ -350,8 +364,8 @@
   </div> <!-- End of admin-dashboard-wrapper -->
 
   <!-- Admin Login Security Card (Visible when unauthenticated) -->
-  <div id="admin-login-wrapper" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; position: fixed; inset: 0; z-index: 3000; background: var(--bg-primary); padding: 20px;">
-    <div class="glass-card" style="max-width: 400px; width: 100%; padding: 40px; display: flex; flex-direction: column; gap: 25px; border-radius: var(--radius-md); box-shadow: var(--shadow-card); border: 1px solid var(--border-color); text-align: center; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px);">
+  <div id="admin-login-wrapper" class="admin-login-wrapper">
+    <div class="glass-card admin-login-card">
       <div class="bg-glow bg-glow-1" style="width: 150px; height: 150px; opacity: 0.15; position: absolute; top: -50px; right: -50px;"></div>
       
       <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid rgba(99, 102, 241, 0.2); margin: 0 auto;">
@@ -390,15 +404,15 @@
 
   <!-- Cropper Modal -->
   <div id="cropper-modal" class="admin-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(8px);">
-    <div class="glass-card" style="max-width: 500px; width: 100%; display: flex; flex-direction: column; gap: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-card); padding: 30px; border-radius: var(--radius-md);">
+    <div class="glass-card cropper-modal-card">
       <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; color: var(--text-primary); margin: 0;">Crop Profile Picture</h3>
       <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: -10px; margin-bottom: 0;">Select your desired circular profile boundary below.</p>
       
-      <div class="cropper-wrapper" style="max-height: 300px; overflow: hidden; display: flex; justify-content: center; align-items: center; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #000;">
+      <div class="cropper-wrapper">
         <img id="cropper-source-img" style="max-width: 100%; max-height: 280px; display: block;">
       </div>
       
-      <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 10px;">
+      <div class="cropper-modal-actions">
         <button type="button" class="btn btn-secondary" id="cropper-cancel-btn" style="border-radius: var(--radius-sm); padding: 8px 16px; font-size: 0.9rem;">Cancel</button>
         <button type="button" class="btn btn-primary" id="cropper-save-btn" style="border-radius: var(--radius-sm); padding: 8px 16px; font-size: 0.9rem;"><i class="fa-solid fa-crop"></i> Crop & Save</button>
       </div>
@@ -408,6 +422,6 @@
   <!-- Load resume data configurations -->
   <script src="resume-data.js?v=27"></script>
   <!-- Dashboard Controller Script -->
-  <script src="admin.js?v=27"></script>
+  <script src="admin.js?v=29"></script>
 </body>
 </html>

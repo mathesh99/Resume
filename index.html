@@ -18,7 +18,7 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=29">
+  <link rel="stylesheet" href="style.css?v=31">
 </head>
 <body>
 
@@ -258,9 +258,38 @@
     </div>
   </footer>
 
+  <!-- Marksheet Preview Modal -->
+  <div id="marksheet-modal" class="marksheet-modal" role="dialog" aria-modal="true" aria-labelledby="marksheet-modal-title" hidden>
+    <div class="marksheet-modal-backdrop" id="marksheet-modal-backdrop"></div>
+    <div class="glass-card marksheet-modal-card">
+      <div class="marksheet-modal-header">
+        <div class="marksheet-modal-heading">
+          <h3 id="marksheet-modal-title">Semester Marksheet</h3>
+          <p id="marksheet-modal-subtitle" class="marksheet-modal-subtitle"></p>
+        </div>
+        <button type="button" id="marksheet-close-btn" class="marksheet-close-btn" aria-label="Close marksheet preview">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="marksheet-modal-body">
+        <img id="marksheet-preview-img" src="" alt="Semester Marksheet">
+        <div id="marksheet-error-msg" class="marksheet-error-msg" hidden>
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span>Unable to preview this image in the browser. You can still try downloading it below.</span>
+        </div>
+      </div>
+      <div class="marksheet-modal-footer">
+        <a id="marksheet-download-btn" class="btn btn-primary" href="#" download="marksheet.jpg">
+          <i class="fa-solid fa-download"></i> Download Marksheet
+        </a>
+        <button type="button" id="marksheet-dismiss-btn" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Dynamic Data File -->
   <script src="resume-data.js?v=28"></script>
   <!-- Application Interactivity & Render Engine -->
-  <script src="app.js?v=28"></script>
+  <script src="app.js?v=30"></script>
 </body>
 </html>

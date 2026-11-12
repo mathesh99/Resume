@@ -293,6 +293,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ==========================================================================
+     MOBILE HEADER ACTIONS DRAWER
+     ========================================================================== */
+  const adminMenuToggle = document.getElementById("admin-menu-toggle");
+  const adminSecondaryActions = document.getElementById("admin-secondary-actions");
+
+  if (adminMenuToggle && adminSecondaryActions) {
+    adminMenuToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = adminSecondaryActions.classList.toggle("open");
+      adminMenuToggle.setAttribute("aria-expanded", String(isOpen));
+      const icon = adminMenuToggle.querySelector("i");
+      if (icon) {
+        icon.className = isOpen ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+      }
+    });
+
+    adminSecondaryActions.querySelectorAll("a, button").forEach(actionEl => {
+      actionEl.addEventListener("click", () => {
+        adminSecondaryActions.classList.remove("open");
+        adminMenuToggle.setAttribute("aria-expanded", "false");
+        const icon = adminMenuToggle.querySelector("i");
+        if (icon) icon.className = "fa-solid fa-bars";
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        adminSecondaryActions.classList.contains("open") &&
+        !adminSecondaryActions.contains(e.target) &&
+        !adminMenuToggle.contains(e.target)
+      ) {
+        adminSecondaryActions.classList.remove("open");
+        adminMenuToggle.setAttribute("aria-expanded", "false");
+        const icon = adminMenuToggle.querySelector("i");
+        if (icon) icon.className = "fa-solid fa-bars";
+      }
+    });
+  }
+
+  /* ==========================================================================
      TAB PANEL SWITCHER
      ========================================================================== */
   const tabButtons = document.querySelectorAll(".admin-tab-btn");
@@ -308,6 +348,11 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.classList.add("active");
       const targetId = btn.getAttribute("data-target");
       document.getElementById(targetId).classList.add("active");
+
+      // Keep active tab pill centered in horizontal scroll strip on mobile
+      if (window.innerWidth <= 968) {
+        btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      }
     });
   });
 
@@ -400,10 +445,10 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <div class="form-group">
-        <label style="display:flex; justify-content:space-between; align-items:center;">
-          Key Achievements & Duties
-          <button type="button" class="btn btn-secondary btn-add-bullet" style="padding:4px 10px; font-size:0.75rem; border-radius:10px;"><i class="fa-solid fa-plus"></i> Add Bullet</button>
-        </label>
+        <div class="admin-sublabel-row">
+          <label>Key Achievements &amp; Duties</label>
+          <button type="button" class="btn btn-secondary btn-add-bullet admin-mini-btn"><i class="fa-solid fa-plus"></i> Add Bullet</button>
+        </div>
         <div class="bullets-editor exp-bullets-container">
           <!-- Bullet points rows appended here -->
         </div>
@@ -479,15 +524,153 @@ document.addEventListener("DOMContentLoaded", () => {
   const eduContainer = document.getElementById("education-list-container");
   const addEduBtn = document.getElementById("add-education-btn");
 
-  const createSemesterRow = (semName = "", gpaValue = "") => {
+  // Compress large uploaded marksheet images cleanly so multiple semesters stay within localStorage & GitHub limits
+  const compressMarksheetImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error("Failed to read file."));
+      reader.onload = (ev) => {
+        const rawUrl = ev.target.result;
+        if (file.size <= 300 * 1024 || file.type === "image/svg+xml") {
+          resolve(rawUrl);
+          return;
+        }
+        const img = new Image();
+        img.onerror = () => resolve(rawUrl);
+        img.onload = () => {
+          const maxDim = 1600;
+          let { width, height } = img;
+          if (width > maxDim || height > maxDim) {
+            if (width >= height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedUrl = canvas.toDataURL("image/jpeg", 0.85);
+          resolve(compressedUrl.length < rawUrl.length ? compressedUrl : rawUrl);
+        };
+        img.src = rawUrl;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const createSemesterRow = (semName = "", gpaValue = "", marksheet = "") => {
     const row = document.createElement("div");
     row.className = "bullet-editor-row semester-row-item";
+    const initialMarksheet = (marksheet || "").trim();
+    const isUrlValue = initialMarksheet && !initialMarksheet.startsWith("data:");
     row.innerHTML = `
-      <input type="text" class="form-input sem-name-input" value="${semName.replace(/"/g, '&quot;')}" placeholder="e.g. Semester 1" style="flex-grow: 2;" required>
-      <input type="text" class="form-input sem-gpa-input" value="${gpaValue.replace(/"/g, '&quot;')}" placeholder="GPA e.g. 8.29" style="flex-grow: 1;" required>
+      <input type="text" class="form-input sem-name-input" value="${semName.replace(/"/g, '&quot;')}" placeholder="e.g. Semester 1" required>
+      <input type="text" class="form-input sem-gpa-input" value="${gpaValue.replace(/"/g, '&quot;')}" placeholder="GPA e.g. 8.29" required>
       <button type="button" class="btn-icon btn-remove-semester" title="Remove Semester"><i class="fa-solid fa-trash-can" style="color:#ef4444;"></i></button>
+      <div class="sem-marksheet-controls">
+        <input type="hidden" class="sem-marksheet-value">
+        <label class="btn btn-secondary admin-mini-btn sem-upload-btn" title="Upload marksheet image (PNG/JPG)">
+          <i class="fa-solid fa-image"></i>
+          <span class="sem-upload-label">${initialMarksheet ? "Change Marksheet" : "Upload Marksheet"}</span>
+          <input type="file" class="sem-marksheet-file" accept="image/*" hidden>
+        </label>
+        <input type="text" class="form-input sem-marksheet-url" placeholder="or paste marksheet image URL (optional)">
+        <div class="sem-marksheet-status" style="display: ${initialMarksheet ? "flex" : "none"};">
+          <img class="sem-marksheet-thumb" alt="Marksheet thumbnail">
+          <span class="sem-marksheet-status-text"></span>
+          <button type="button" class="btn-icon btn-clear-marksheet" title="Remove Marksheet">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
     `;
-    
+
+    const valInput = row.querySelector(".sem-marksheet-value");
+    const fileInput = row.querySelector(".sem-marksheet-file");
+    const urlInput = row.querySelector(".sem-marksheet-url");
+    const uploadLabel = row.querySelector(".sem-upload-label");
+    const statusWrap = row.querySelector(".sem-marksheet-status");
+    const thumbImg = row.querySelector(".sem-marksheet-thumb");
+    const statusText = row.querySelector(".sem-marksheet-status-text");
+    const clearBtn = row.querySelector(".btn-clear-marksheet");
+
+    const setMarksheetState = (src, message) => {
+      valInput.value = src || "";
+      if (src) {
+        thumbImg.src = src;
+        thumbImg.style.display = "block";
+        statusText.textContent = message || (src.startsWith("data:") ? "Marksheet attached" : "Image URL linked");
+        statusText.style.color = "var(--secondary)";
+        statusWrap.style.display = "flex";
+        uploadLabel.textContent = "Change Marksheet";
+      } else {
+        thumbImg.removeAttribute("src");
+        thumbImg.style.display = "none";
+        statusText.textContent = "";
+        statusWrap.style.display = "none";
+        uploadLabel.textContent = "Upload Marksheet";
+      }
+    };
+
+    if (initialMarksheet) {
+      if (isUrlValue) urlInput.value = initialMarksheet;
+      setMarksheetState(initialMarksheet, initialMarksheet.startsWith("data:") ? "Marksheet attached" : "Image URL linked");
+    }
+
+    fileInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file (JPG, PNG, WebP) for your marksheet.");
+        fileInput.value = "";
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Image is too large (over 10MB). Please choose a smaller image.");
+        fileInput.value = "";
+        return;
+      }
+
+      thumbImg.style.display = "none";
+      statusWrap.style.display = "flex";
+      statusText.textContent = "Optimizing image...";
+      statusText.style.color = "var(--primary)";
+
+      try {
+        const dataUrl = await compressMarksheetImage(file);
+        const approxKb = Math.round((dataUrl.length * 3) / 4 / 1024);
+        urlInput.value = "";
+        setMarksheetState(dataUrl, `Ready (${approxKb} KB)`);
+      } catch {
+        thumbImg.style.display = "none";
+        statusText.textContent = "Error reading image.";
+        statusText.style.color = "#ef4444";
+      }
+    });
+
+    urlInput.addEventListener("input", () => {
+      const url = urlInput.value.trim();
+      fileInput.value = "";
+      if (url) {
+        setMarksheetState(url, "Image URL linked");
+      } else if (!valInput.value.startsWith("data:")) {
+        setMarksheetState("");
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      fileInput.value = "";
+      urlInput.value = "";
+      setMarksheetState("");
+    });
+
     row.querySelector(".btn-remove-semester").addEventListener("click", () => {
       row.remove();
     });
@@ -535,20 +718,20 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <div class="form-group">
-        <label style="display:flex; justify-content:space-between; align-items:center;">
-          Semester Pointers / GPAs (Optional)
-          <button type="button" class="btn btn-secondary btn-add-semester" style="padding:4px 10px; font-size:0.75rem; border-radius:10px;"><i class="fa-solid fa-plus"></i> Add Semester</button>
-        </label>
-        <div class="bullets-editor edu-semesters-container" style="gap: 10px; margin-top: 10px;">
+        <div class="admin-sublabel-row">
+          <label>Semester Pointers / GPAs (Optional)</label>
+          <button type="button" class="btn btn-secondary btn-add-semester admin-mini-btn"><i class="fa-solid fa-plus"></i> Add Semester</button>
+        </div>
+        <div class="bullets-editor edu-semesters-container" style="gap: 10px; margin-top: 6px;">
           <!-- Semester entries -->
         </div>
       </div>
 
       <div class="form-group">
-        <label style="display:flex; justify-content:space-between; align-items:center;">
-          Honors & Highlights
-          <button type="button" class="btn btn-secondary btn-add-bullet" style="padding:4px 10px; font-size:0.75rem; border-radius:10px;"><i class="fa-solid fa-plus"></i> Add Bullet</button>
-        </label>
+        <div class="admin-sublabel-row">
+          <label>Honors &amp; Highlights</label>
+          <button type="button" class="btn btn-secondary btn-add-bullet admin-mini-btn"><i class="fa-solid fa-plus"></i> Add Bullet</button>
+        </div>
         <div class="bullets-editor edu-bullets-container">
           <!-- Bullet lines -->
         </div>
@@ -570,7 +753,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Populate semesters
     if (edu.semesters && edu.semesters.length > 0) {
       edu.semesters.forEach(sem => {
-        semestersContainer.appendChild(createSemesterRow(sem.name, sem.gpa));
+        semestersContainer.appendChild(createSemesterRow(sem.name, sem.gpa, sem.marksheet || ""));
       });
     }
 
@@ -602,9 +785,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = document.createElement("div");
     row.className = "bullet-editor-row skill-row-item";
     row.innerHTML = `
-      <input type="text" class="form-input skill-name-input" value="${skillName}" placeholder="Skill name" style="flex-grow:2;" required>
-      <input type="range" class="skill-range-input" min="0" max="100" value="${level}" style="flex-grow:2;">
-      <span class="skill-percent-display" style="width:40px; font-weight:600; font-size:0.9rem; text-align:right;">${level}%</span>
+      <input type="text" class="form-input skill-name-input" value="${skillName}" placeholder="Skill name" required>
+      <input type="range" class="skill-range-input" min="0" max="100" value="${level}">
+      <span class="skill-percent-display">${level}%</span>
       <button type="button" class="btn-icon btn-remove-skill" title="Remove Skill"><i class="fa-solid fa-trash-can" style="color:#ef4444;"></i></button>
     `;
 
@@ -625,9 +808,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const panel = document.createElement("div");
     panel.className = "list-editor-item skill-category-item";
     panel.innerHTML = `
-      <div class="list-item-header" style="display:flex; justify-content:space-between; align-items:center; padding-bottom:5px;">
-        <input type="text" class="form-input skill-category-name" value="${cat.category || ''}" placeholder="Category Title" style="max-width:300px; font-weight:700; font-size:1.15rem;" required>
-        <button type="button" class="btn btn-secondary btn-add-skill-row" style="padding:4px 10px; font-size:0.75rem; border-radius:10px;"><i class="fa-solid fa-plus"></i> Add Skill</button>
+      <div class="list-item-header skill-category-header">
+        <input type="text" class="form-input skill-category-name" value="${cat.category || ''}" placeholder="Category Title" required>
+        <button type="button" class="btn btn-secondary btn-add-skill-row admin-mini-btn"><i class="fa-solid fa-plus"></i> Add Skill</button>
       </div>
       <div class="bullets-editor skill-items-list" style="gap:15px; margin-top:10px;">
         <!-- Skill items appended here -->
@@ -877,8 +1060,9 @@ document.addEventListener("DOMContentLoaded", () => {
       item.querySelectorAll(".semester-row-item").forEach(semRow => {
         const name = semRow.querySelector(".sem-name-input").value.trim();
         const gpa = semRow.querySelector(".sem-gpa-input").value.trim();
+        const marksheet = (semRow.querySelector(".sem-marksheet-value")?.value || "").trim();
         if (name && gpa) {
-          semesters.push({ name, gpa });
+          semesters.push(marksheet ? { name, gpa, marksheet } : { name, gpa });
         }
       });
 
