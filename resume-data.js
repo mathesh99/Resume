@@ -10,7 +10,7 @@ const resumeData = {
     "email": "matheshnadar7@gmail.com",
     "phone": "+91 8424951029",
     "location": "Jai Janta Nagar, Orlem Malad West, Mumbai 400064",
-    "website": "https://github.com/mathesh99/Resume",
+    "website": "https://mathesh99.github.io/Resume",
     "linkedin": "https://linkedin.com/in/matheshnadar7",
     "github": "https://github.com/mathesh99",
     "twitter": "",
