@@ -1416,14 +1416,12 @@ if (typeof module !== 'undefined' && module.exports) {
         const targetFilePath = "resume-data.js";
         const apiUrl = `https://api.github.com/repos/${repo}/contents/${targetFilePath}`;
 
-        // 2. Fetch the target file's current SHA from GitHub API (cache: "no-store" + timestamp prevents 409 SHA conflicts)
+        // 2. Fetch the target file's current SHA from GitHub API (timestamp query prevents 409 SHA conflicts)
         const getResponse = await fetch(`${apiUrl}?_=${Date.now()}`, {
           method: "GET",
-          cache: "no-store",
           headers: {
             "Authorization": `Bearer ${token}`,
-            "Accept": "application/vnd.github.v3+json",
-            "Cache-Control": "no-cache, no-store, must-revalidate"
+            "Accept": "application/vnd.github.v3+json"
           }
         });
 
@@ -1496,8 +1494,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
     try {
       const headers = {
-        "Accept": "application/vnd.github.v3+json",
-        "Cache-Control": "no-cache, no-store, must-revalidate"
+        "Accept": "application/vnd.github.v3+json"
       };
       if (token) {
         headers["Authorization"] = `Bearer ${token}`;
@@ -1505,7 +1502,6 @@ if (typeof module !== 'undefined' && module.exports) {
 
       const res = await fetch(`https://api.github.com/repos/${repo}/contents/resume-data.js?_=${Date.now()}`, {
         method: "GET",
-        cache: "no-store",
         headers
       });
 
