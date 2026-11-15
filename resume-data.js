@@ -1,6 +1,6 @@
 // Personal Portfolio and Resume Data - Mathesh Nadar
 const resumeData = {
-  "updatedAt": 1794671191309,
+  "updatedAt": 1794759287783,
   "personal": {
     "name": "Mathesh Nadar",
     "title": "AI & Data Science Engineer",
@@ -17,8 +17,8 @@ const resumeData = {
     "twitter": "",
     "about": "I am an AI & Data Science undergraduate with practical experience in software development, testing, and full-stack web application development through internships and academic projects. Proficient in JavaScript, Java, React.js, Node.js, Express.js, and REST APIs. I have built projects including an Insurance Service Chatbot, a Cashify-like gadget valuation platform, and an Automatic Timetable Generator System while contributing to CRM projects involving testing, debugging, and backend development. Strong problem-solving skills with a focus on developing scalable and efficient software solutions.",
     "birthDate": "10/01/2005",
-    "maritalStatus": "Unmarried",
-    "nationality": "Indian"
+    "nationality": "Indian",
+    "customDetails": []
   },
   "experience": [
     {
@@ -250,7 +250,7 @@ const resumeData = {
         "Matplotlib",
         "Seaborn"
       ],
-      "githubLink": "https://github.com/mathesh99/Customer-Segmentation-ML-Model",
+      "githubLink": "https://github.com/mathesh99",
       "liveLink": "",
       "accentColor": "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)"
     },
@@ -266,8 +266,8 @@ const resumeData = {
         "MySQL",
         "CSS3"
       ],
-      "githubLink": "https://github.com/mathesh99/Cashify-Like-Gadget-Valuation-Platform",
-      "liveLink": "",
+      "githubLink": "https://github.com/mathesh99",
+      "liveLink": "https://gold-reindeer-161566.hostingersite.com/",
       "accentColor": "linear-gradient(135deg, #f857a6 0%, #ff5858 100%)"
     },
     {
