@@ -1,6 +1,6 @@
 // Personal Portfolio and Resume Data - Mathesh Nadar
 const resumeData = {
-  "updatedAt": 1794759287783,
+  "updatedAt": 1794759575183,
   "personal": {
     "name": "Mathesh Nadar",
     "title": "AI & Data Science Engineer",
@@ -234,7 +234,7 @@ const resumeData = {
         "Generative AI",
         "Data Analysis"
       ],
-      "githubLink": "https://github.com/mathesh99",
+      "githubLink": "https://github.com/mathesh99/RAG-Based-Market-Trend-Predictor",
       "liveLink": "",
       "accentColor": "linear-gradient(135deg, #8a2be2 0%, #4a00e0 100%)"
     },
