@@ -368,6 +368,20 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ==========================================================================
      POPULATE PERSONAL INFO PANEL
      ========================================================================== */
+  const createCustomDetailRow = (label = "", value = "") => {
+    const row = document.createElement("div");
+    row.className = "custom-detail-row";
+    row.innerHTML = `
+      <input type="text" class="form-input custom-detail-label-input" value="${(label || '').replace(/"/g, '&quot;')}" placeholder="Field Label (e.g. Languages)">
+      <input type="text" class="form-input custom-detail-value-input" value="${(value || '').replace(/"/g, '&quot;')}" placeholder="Field Value (e.g. English, Hindi)">
+      <button type="button" class="btn-icon btn-remove-detail" title="Remove Field"><i class="fa-solid fa-trash-can" style="color:#ef4444;"></i></button>
+    `;
+    row.querySelector(".btn-remove-detail").addEventListener("click", () => {
+      row.remove();
+    });
+    return row;
+  };
+
   const populatePersonalForm = () => {
     document.getElementById("p-name").value = data.personal.name || "";
     document.getElementById("p-title").value = data.personal.title || "";
@@ -380,12 +394,30 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("p-phone").value = data.personal.phone || "";
     document.getElementById("p-location").value = data.personal.location || "";
     document.getElementById("p-dob").value = data.personal.birthDate || "";
-    document.getElementById("p-marital").value = data.personal.maritalStatus || "";
     document.getElementById("p-nationality").value = data.personal.nationality || "";
     document.getElementById("p-website").value = data.personal.website || "";
     document.getElementById("p-linkedin").value = data.personal.linkedin || "";
     document.getElementById("p-github").value = data.personal.github || "";
+
+    const customContainer = document.getElementById("custom-details-container");
+    if (customContainer) {
+      customContainer.innerHTML = "";
+      const customList = data.personal.customDetails || [];
+      customList.forEach(item => {
+        customContainer.appendChild(createCustomDetailRow(item.label, item.value));
+      });
+    }
   };
+
+  const addCustomDetailBtn = document.getElementById("add-custom-detail-btn");
+  if (addCustomDetailBtn) {
+    addCustomDetailBtn.addEventListener("click", () => {
+      const customContainer = document.getElementById("custom-details-container");
+      if (customContainer) {
+        customContainer.appendChild(createCustomDetailRow());
+      }
+    });
+  }
 
   /* ==========================================================================
      DYNAMIC WORK EXPERIENCE MANAGER
@@ -993,6 +1025,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const state = {};
     state.updatedAt = Date.now();
 
+    // Custom personal details
+    const customDetails = [];
+    const customContainer = document.getElementById("custom-details-container");
+    if (customContainer) {
+      customContainer.querySelectorAll(".custom-detail-row").forEach(row => {
+        const lbl = row.querySelector(".custom-detail-label-input")?.value.trim() || "";
+        const val = row.querySelector(".custom-detail-value-input")?.value.trim() || "";
+        if (lbl || val) {
+          customDetails.push({ label: lbl, value: val });
+        }
+      });
+    }
+
     // 1. Personal details
     state.personal = {
       name: document.getElementById("p-name").value.trim(),
@@ -1010,8 +1055,8 @@ document.addEventListener("DOMContentLoaded", () => {
       twitter: data.personal.twitter || "", // Preserve if existing
       about: document.getElementById("p-about").value.trim(),
       birthDate: document.getElementById("p-dob").value.trim(),
-      maritalStatus: document.getElementById("p-marital").value.trim(),
-      nationality: document.getElementById("p-nationality").value.trim()
+      nationality: document.getElementById("p-nationality").value.trim(),
+      customDetails: customDetails
     };
 
     // Validation

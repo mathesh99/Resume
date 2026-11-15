@@ -138,15 +138,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const personalDetails = [
     { label: "Role", value: data.personal.title },
     { label: "Location", value: data.personal.location },
-    { label: "Mobile", value: `<a href="tel:${data.personal.phone}" style="color: var(--primary);">${data.personal.phone}</a>` },
-    { label: "Email", value: `<a href="mailto:${data.personal.email}" style="color: var(--primary);">${data.personal.email}</a>` },
-    { label: "Website", value: `<a href="${data.personal.website}" target="_blank" rel="noopener">${data.personal.website.replace("https://", "")}</a>` },
+    { label: "Mobile", value: data.personal.phone ? `<a href="tel:${data.personal.phone}" style="color: var(--primary);">${data.personal.phone}</a>` : "" },
+    { label: "Email", value: data.personal.email ? `<a href="mailto:${data.personal.email}" style="color: var(--primary);">${data.personal.email}</a>` : "" },
+    { label: "Website", value: data.personal.website ? `<a href="${data.personal.website}" target="_blank" rel="noopener">${data.personal.website.replace(/^https?:\/\//, "")}</a>` : "" },
     { label: "DOB", value: data.personal.birthDate || "" },
-    { label: "Marital Status", value: data.personal.maritalStatus || "" },
+    { label: "LinkedIn", value: data.personal.linkedin ? `<a href="${data.personal.linkedin}" target="_blank" rel="noopener" style="color: var(--primary);">${data.personal.linkedin.replace(/^https?:\/\/(www\.)?/, "")}</a>` : "" },
     { label: "Nationality", value: data.personal.nationality || "" }
   ];
-  
-  aboutInfoGrid.innerHTML = personalDetails.map(detail => `
+
+  if (Array.isArray(data.personal.customDetails)) {
+    data.personal.customDetails.forEach(item => {
+      if (item && item.label && item.value) {
+        let val = item.value;
+        if (/^https?:\/\//i.test(val)) {
+          val = `<a href="${val}" target="_blank" rel="noopener" style="color: var(--primary);">${val.replace(/^https?:\/\/(www\.)?/, "")}</a>`;
+        }
+        personalDetails.push({ label: item.label, value: val });
+      }
+    });
+  }
+
+  const visibleDetails = personalDetails.filter(detail => detail.value && String(detail.value).trim() !== "");
+
+  aboutInfoGrid.innerHTML = visibleDetails.map(detail => `
     <div class="about-detail-item">
       <span class="about-detail-label">${detail.label}</span>
       <span class="about-detail-value">${detail.value}</span>

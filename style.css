@@ -2293,6 +2293,27 @@ footer {
   flex-grow: 1;
 }
 
+.custom-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.custom-detail-label-input {
+  flex: 1 1 140px;
+  min-width: 100px;
+}
+
+.custom-detail-value-input {
+  flex: 2 1 200px;
+  min-width: 120px;
+}
+
+.custom-detail-row .btn-remove-detail {
+  flex-shrink: 0;
+}
+
 .btn-icon {
   width: 42px;
   height: 42px;
@@ -3017,6 +3038,28 @@ body.admin-page .toggle-password-visibility {
   }
 
   body.admin-page .bullet-editor-row .btn-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  body.admin-page .custom-detail-row {
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  body.admin-page .custom-detail-label-input {
+    flex: 1 1 100%;
+  }
+
+  body.admin-page .custom-detail-value-input {
+    flex: 1 1 calc(100% - 50px);
+  }
+
+  body.admin-page .custom-detail-row .btn-remove-detail {
     width: 40px;
     height: 40px;
   }

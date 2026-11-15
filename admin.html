@@ -189,33 +189,43 @@
             <div class="admin-form-row">
               <div class="form-group">
                 <label for="p-dob">Date of Birth</label>
-                <input type="text" id="p-dob" class="form-input" placeholder="e.g. 10/01/2005" required>
+                <input type="text" id="p-dob" class="form-input" placeholder="e.g. 10/01/2005 (Leave blank to hide)">
               </div>
-              <div class="form-group">
-                <label for="p-marital">Marital Status</label>
-                <input type="text" id="p-marital" class="form-input" placeholder="e.g. Unmarried" required>
-              </div>
-            </div>
-
-            <div class="admin-form-row">
               <div class="form-group">
                 <label for="p-nationality">Nationality</label>
-                <input type="text" id="p-nationality" class="form-input" placeholder="e.g. Indian" required>
-              </div>
-              <div class="form-group">
-                <label for="p-website">Personal Website URL</label>
-                <input type="url" id="p-website" class="form-input" required>
+                <input type="text" id="p-nationality" class="form-input" placeholder="e.g. Indian (Leave blank to hide)">
               </div>
             </div>
 
             <div class="admin-form-row">
               <div class="form-group">
-                <label for="p-linkedin">LinkedIn URL</label>
-                <input type="url" id="p-linkedin" class="form-input" required>
+                <label for="p-website">Personal Website URL</label>
+                <input type="url" id="p-website" class="form-input" placeholder="e.g. https://mathesh99.github.io/Resume">
               </div>
               <div class="form-group">
-                <label for="p-github">GitHub Profile URL</label>
-                <input type="url" id="p-github" class="form-input" required>
+                <label for="p-linkedin">LinkedIn URL</label>
+                <input type="url" id="p-linkedin" class="form-input" placeholder="e.g. https://linkedin.com/in/matheshnadar7">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="p-github">GitHub Profile URL</label>
+              <input type="url" id="p-github" class="form-input" placeholder="e.g. https://github.com/mathesh99">
+            </div>
+
+            <!-- Dynamic Additional Personal Details -->
+            <div class="custom-details-section" style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+              <div class="admin-sublabel-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div>
+                  <h4 style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 0;">Additional Personal Details</h4>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 0;">Add, edit, or delete custom fields displayed in the About section (e.g. Languages, Blood Group, Passport).</p>
+                </div>
+                <button type="button" class="btn btn-secondary admin-mini-btn" id="add-custom-detail-btn">
+                  <i class="fa-solid fa-plus"></i> Add Field
+                </button>
+              </div>
+              <div id="custom-details-container" class="bullets-editor" style="gap: 8px;">
+                <!-- Populated dynamically via JS -->
               </div>
             </div>
           </form>
