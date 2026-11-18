@@ -1,6 +1,6 @@
 // Personal Portfolio and Resume Data - Mathesh Nadar
 const resumeData = {
-  "updatedAt": 1794760826893,
+  "updatedAt": 1794984371782,
   "personal": {
     "name": "Mathesh Nadar",
     "title": "AI & Data Science Engineer",
@@ -17,8 +17,8 @@ const resumeData = {
     "twitter": "",
     "about": "I am an AI & Data Science undergraduate with practical experience in software development, testing, and full-stack web application development through internships and academic projects. Proficient in JavaScript, Java, React.js, Node.js, Express.js, and REST APIs. I have built projects including an Insurance Service Chatbot, a Cashify-like gadget valuation platform, and an Automatic Timetable Generator System while contributing to CRM projects involving testing, debugging, and backend development. Strong problem-solving skills with a focus on developing scalable and efficient software solutions.",
     "birthDate": "10/01/2005",
-    "nationality": "Indian",
-    "customDetails": []
+    "maritalStatus": "",
+    "nationality": "Indian"
   },
   "experience": [
     {
@@ -267,7 +267,7 @@ const resumeData = {
         "CSS3"
       ],
       "githubLink": "https://github.com/mathesh99",
-      "liveLink": "https://gold-reindeer-161566.hostingersite.com/",
+      "liveLink": "",
       "accentColor": "linear-gradient(135deg, #f857a6 0%, #ff5858 100%)"
     },
     {
