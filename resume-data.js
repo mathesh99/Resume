@@ -1,6 +1,6 @@
 // Personal Portfolio and Resume Data - Mathesh Nadar
 const resumeData = {
-  "updatedAt": 1795167167540,
+  "updatedAt": 1795167243371,
   "personal": {
     "name": "Mathesh Nadar",
     "title": "CYBERSECURITY ANALYST",
@@ -285,7 +285,7 @@ const resumeData = {
   ],
   "projects": [
     {
-      "title": "VELOUR — Luxury Fashion E-Commerce Platform",
+      "title": "HE & SHE — Luxury Fashion E-Commerce Platform",
       "description": "Editorial-grade, full-stack luxury fashion e-commerce monorepo platform featuring multi-variant inventory control (sizes/colors/SKUs), guest-to-account cart synchronization, Brevo OTP email authentication, Razorpay payments, and an administrative real-time analytics suite.",
       "category": "Fullstack",
       "role": "Full-Stack Developer",
