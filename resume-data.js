@@ -1,6 +1,6 @@
 // Personal Portfolio and Resume Data - Mathesh Nadar
 const resumeData = {
-  "updatedAt": 1795166703615,
+  "updatedAt": 1795167167540,
   "personal": {
     "name": "Mathesh Nadar",
     "title": "CYBERSECURITY ANALYST",
@@ -302,7 +302,7 @@ const resumeData = {
         "Cloudinary"
       ],
       "githubLink": "https://github.com/mathesh99/velour-clothing-website",
-      "liveLink": "",
+      "liveLink": "https://he-and-she-clothing.vercel.app/",
       "accentColor": "linear-gradient(135deg, #1f1f1f 0%, #c5a059 100%)"
     },
     {
