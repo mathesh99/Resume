@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (name.includes("program") || name.includes("lang")) return "fa-solid fa-code";
     if (name.includes("data") || name.includes("ml") || name.includes("ai")) return "fa-solid fa-brain";
     if (name.includes("soft") || name.includes("professional")) return "fa-solid fa-user-check";
-    if (name.includes("front")) return "fa-solid fa-laptop-code";
+    if (name.includes("full") || name.includes("stack") || name.includes("web") || name.includes("front")) return "fa-solid fa-laptop-code";
     if (name.includes("back") || name.includes("database")) return "fa-solid fa-server";
     if (name.includes("devops") || name.includes("cloud")) return "fa-solid fa-cloud";
     return "fa-solid fa-screwdriver-wrench";

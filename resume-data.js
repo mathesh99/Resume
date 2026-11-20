@@ -1,6 +1,6 @@
 // Personal Portfolio and Resume Data - Mathesh Nadar
 const resumeData = {
-  "updatedAt": 1795165913955,
+  "updatedAt": 1795166119100,
   "personal": {
     "name": "Mathesh Nadar",
     "title": "CYBERSECURITY ANALYST",
@@ -15,7 +15,7 @@ const resumeData = {
     "linkedin": "https://linkedin.com/in/matheshnadar7",
     "github": "https://github.com/mathesh99",
     "twitter": "",
-    "about": "I am an AI & Data Science undergraduate with practical experience in software development, full-stack engineering, and cybersecurity through internships and academic projects. Proficient in TypeScript, JavaScript, Python, React.js, Node.js, Express.js, FastAPI, PostgreSQL, and REST APIs. I have engineered high-impact projects including VELOUR (a luxury fashion e-commerce monorepo), FinSOC-SOAR (a financial SOC detection and automated incident response platform), and AI/ML predictive analytics systems while contributing to CRM projects involving testing, debugging, and backend development. Strong problem-solving skills with a focus on developing scalable, secure, and efficient software solutions.",
+    "about": "I am an AI & Data Science undergraduate at Thadomal Shahani Engineering College with practical experience spanning cybersecurity operations, full-stack web development, and data analytics. Proficient in Python, TypeScript, JavaScript, SQL, React.js, Node.js, Express.js, FastAPI, PostgreSQL, Power BI, and REST APIs. I have built high-impact projects including FinSOC-SOAR (a financial SOC detection and automated incident response platform), VELOUR (a full-stack luxury fashion e-commerce monorepo), and machine learning predictive analytics systems. Strong analytical and problem-solving skills with a dedicated focus on building scalable, data-driven, and securely engineered software solutions.",
     "birthDate": "10/01/2005",
     "nationality": "Indian",
     "customDetails": []
@@ -146,85 +146,122 @@ const resumeData = {
       ]
     },
     {
-      "category": "Programming Languages",
+      "category": "Full-Stack Web Development",
       "items": [
         {
-          "name": "Python (Security Tooling & Scripting)",
+          "name": "React.js (React 19) & Modern Frontend",
           "level": 90
         },
         {
-          "name": "TypeScript & JavaScript",
+          "name": "Node.js, Express.js & REST APIs",
           "level": 90
         },
         {
-          "name": "Java",
-          "level": 80
-        },
-        {
-          "name": "Bash / Linux Shell",
+          "name": "PostgreSQL, MySQL & Prisma ORM",
           "level": 85
         },
         {
-          "name": "SQL",
+          "name": "Tailwind CSS & Responsive UI Design",
+          "level": 90
+        },
+        {
+          "name": "Redis Caching & Session Management",
           "level": 85
         },
         {
-          "name": "C",
-          "level": 70
+          "name": "FastAPI Backend Architecture",
+          "level": 85
         }
       ]
     },
     {
-      "category": "Security Tools & Frameworks",
+      "category": "Data Analysis & Machine Learning",
       "items": [
         {
-          "name": "FastAPI, Express.js & REST APIs",
+          "name": "Data Visualization & Exploratory Cleaning (EDA)",
           "level": 90
+        },
+        {
+          "name": "Pandas, NumPy & Data Wrangling",
+          "level": 90
+        },
+        {
+          "name": "Microsoft Excel & Power BI Dashboards",
+          "level": 85
+        },
+        {
+          "name": "Scikit-Learn, XGBoost & Predictive Modeling",
+          "level": 85
+        },
+        {
+          "name": "Matplotlib, Seaborn & Plotly Charts",
+          "level": 90
+        },
+        {
+          "name": "Generative AI & RAG Architecture",
+          "level": 85
+        }
+      ]
+    },
+    {
+      "category": "Programming Languages",
+      "items": [
+        {
+          "name": "Python (Analytics, ML & Security)",
+          "level": 90
+        },
+        {
+          "name": "TypeScript & JavaScript (Modern ES6+)",
+          "level": 90
+        },
+        {
+          "name": "SQL (Complex Queries, Joins & Optimization)",
+          "level": 85
+        },
+        {
+          "name": "Java (Core OOP & Enterprise Concepts)",
+          "level": 80
+        },
+        {
+          "name": "Bash / Linux Shell Scripting",
+          "level": 85
+        },
+        {
+          "name": "C (Algorithmic Foundations)",
+          "level": 75
+        }
+      ]
+    },
+    {
+      "category": "DevSecOps, Cloud & Tools",
+      "items": [
+        {
+          "name": "Git & GitHub Version Control",
+          "level": 95
         },
         {
           "name": "Docker & Container Security",
           "level": 85
         },
         {
-          "name": "Git & GitHub DevSecOps",
-          "level": 90
+          "name": "Linux / POSIX System Administration",
+          "level": 85
         },
         {
           "name": "Wireshark & PCAP Traffic Analysis",
           "level": 80
         },
         {
-          "name": "Linux / POSIX Administration",
-          "level": 85
+          "name": "VS Code, Postman & Developer Tooling",
+          "level": 95
         }
       ]
     },
     {
-      "category": "Data Analysis & AI/ML Security",
+      "category": "Core Professional & Soft Skills",
       "items": [
         {
-          "name": "AI / ML Threat Detection Modeling",
-          "level": 85
-        },
-        {
-          "name": "Log Aggregation & Event Correlation",
-          "level": 90
-        },
-        {
-          "name": "Pandas, NumPy & Security Analytics",
-          "level": 85
-        },
-        {
-          "name": "Data Cleaning & Anomaly Detection",
-          "level": 90
-        }
-      ]
-    },
-    {
-      "category": "Core Professional Skills",
-      "items": [
-        {
-          "name": "Analytical Problem Solving",
+          "name": "Analytical & Critical Problem Solving",
           "level": 95
         },
         {
@@ -238,6 +275,10 @@ const resumeData = {
         {
           "name": "Team Collaboration & Communication",
           "level": 90
+        },
+        {
+          "name": "Agile Mindset & Fast Adaptive Learner",
+          "level": 95
         }
       ]
     }
