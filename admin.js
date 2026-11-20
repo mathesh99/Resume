@@ -118,6 +118,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (localResumeData) {
     try {
       const parsedLocal = JSON.parse(localResumeData);
+      if (parsedLocal && parsedLocal.personal) {
+        delete parsedLocal.personal.maritalStatus;
+        if (!Array.isArray(parsedLocal.personal.customDetails)) {
+          parsedLocal.personal.customDetails = [];
+        }
+      }
       const remoteTime = window.resumeData?.updatedAt || 0;
       const localTime = parsedLocal?.updatedAt || 0;
       // If resume-data.js from code/remote is newer than local browser storage, adopt remote
@@ -1396,29 +1402,47 @@ if (typeof module !== 'undefined' && module.exports) {
      GITHUB AUTO-SYNC CMS INTEGRATION
      ========================================================================== */
   const githubSyncForm = document.getElementById("github-sync-form");
+  const normalizeRepo = (input) => {
+    return (input || "")
+      .trim()
+      .replace(/^https?:\/\/github\.com\//i, "")
+      .replace(/\.git$/i, "")
+      .replace(/^\/+|\/+$/g, "")
+      .trim();
+  };
+
+  const normalizeToken = (input) => {
+    return (input || "")
+      .trim()
+      .replace(/^Bearer\s+/i, "")
+      .replace(/["']/g, "")
+      .trim();
+  };
+
   const githubRepoInput = document.getElementById("github-repo");
   const githubTokenInput = document.getElementById("github-token");
   const githubSyncBtn = document.getElementById("github-sync-btn");
 
   if (githubSyncForm) {
     // Populate stored GitHub configuration on load
-    githubRepoInput.value = localStorage.getItem("githubRepo") || "mathesh99/Resume";
-    githubTokenInput.value = localStorage.getItem("githubToken") || "";
+    githubRepoInput.value = normalizeRepo(localStorage.getItem("githubRepo")) || "mathesh99/Resume";
+    githubTokenInput.value = normalizeToken(localStorage.getItem("githubToken")) || "";
 
     // Save GitHub configuration listener
     githubSyncForm.addEventListener("submit", (e) => {
       e.preventDefault();
       
-      const repoVal = githubRepoInput.value.trim();
-      const tokenVal = githubTokenInput.value.trim();
+      const repoVal = normalizeRepo(githubRepoInput.value);
+      const tokenVal = normalizeToken(githubTokenInput.value);
 
       if (!repoVal || !tokenVal) {
-        alert("Both Repository Path and Token are required!");
+        alert("Both Repository Path and Token are required! (Example: mathesh99/Resume)");
         return;
       }
 
       localStorage.setItem("githubRepo", repoVal);
       localStorage.setItem("githubToken", tokenVal);
+      githubRepoInput.value = repoVal;
 
       showStatus("GitHub configurations saved successfully!", "success");
     });
@@ -1426,8 +1450,10 @@ if (typeof module !== 'undefined' && module.exports) {
 
   if (githubSyncBtn) {
     githubSyncBtn.addEventListener("click", async () => {
-      const repo = localStorage.getItem("githubRepo") || "mathesh99/Resume";
-      const token = localStorage.getItem("githubToken");
+      const rawRepo = localStorage.getItem("githubRepo") || "mathesh99/Resume";
+      const rawToken = localStorage.getItem("githubToken");
+      const repo = normalizeRepo(rawRepo);
+      const token = normalizeToken(rawToken);
 
       if (!token) {
         // Switch tab to the GitHub settings view to help the user configure PAT credentials
@@ -1443,7 +1469,7 @@ if (typeof module !== 'undefined' && module.exports) {
       githubSyncBtn.disabled = true;
       const originalHtml = githubSyncBtn.innerHTML;
       githubSyncBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Syncing...`;
-      showStatus("Connecting to GitHub API, serializing data...", "success");
+      showStatus("1/3: Connecting to GitHub repository & verifying...", "info");
 
       try {
         // 1. Serialize active workspace data state
@@ -1457,6 +1483,13 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = resumeData;
 }
 `;
+
+        // Check file size against GitHub Contents API 1MB limit
+        const utf8Bytes = new TextEncoder().encode(fileContent);
+        if (utf8Bytes.byteLength > 1000000) {
+          const sizeKb = (utf8Bytes.byteLength / 1024).toFixed(1);
+          throw new Error(`Resume dataset is ${sizeKb} KB. GitHub Contents API only allows files under 1000 KB (1 MB). If you uploaded a large PDF or high-res photo, please compress it or use an external link.`);
+        }
 
         const targetFilePath = "resume-data.js";
         const apiUrl = `https://api.github.com/repos/${repo}/contents/${targetFilePath}`;
@@ -1474,15 +1507,18 @@ if (typeof module !== 'undefined' && module.exports) {
         if (getResponse.ok) {
           const fileData = await getResponse.json();
           fileSha = fileData.sha;
-        } else if (getResponse.status !== 404) {
-          // 404 means the file doesn't exist yet (which is fine, we will create it), other errors are critical
-          const errData = await getResponse.json();
-          throw new Error(errData.message || "Failed to fetch file metadata from GitHub.");
+        } else if (getResponse.status === 401 || getResponse.status === 403) {
+          const errData = await getResponse.json().catch(() => ({}));
+          throw new Error(`GitHub Authentication failed (Status ${getResponse.status}): ${errData.message || "Invalid or expired token / insufficient permissions. Make sure token has 'repo' or 'Contents: Read and write' permissions."}`);
+        } else if (getResponse.status === 404) {
+          // File doesn't exist yet, which is fine
+        } else {
+          const errData = await getResponse.json().catch(() => ({}));
+          throw new Error(errData.message || `Failed to fetch file metadata from GitHub (Status ${getResponse.status}).`);
         }
 
-        // 3. Convert content text into UTF-8 base64 encoding (btoa requires character escaping for Unicode compatibility)
-        // Chunk encoding avoids maximum call stack size limits on Function.prototype.apply for large image/PDF assets
-        const utf8Bytes = new TextEncoder().encode(fileContent);
+        // 3. Convert content text into UTF-8 base64 encoding
+        showStatus("2/3: Encoding resume dataset...", "info");
         let binaryString = "";
         const len = utf8Bytes.byteLength;
         const chunkSize = 65536; // 64KB chunks
@@ -1493,6 +1529,7 @@ if (typeof module !== 'undefined' && module.exports) {
         const base64Content = btoa(binaryString);
 
         // 4. Send PUT request to update the file in the repository
+        showStatus("3/3: Pushing commit to GitHub repository...", "info");
         const putResponse = await fetch(apiUrl, {
           method: "PUT",
           headers: {
@@ -1508,8 +1545,8 @@ if (typeof module !== 'undefined' && module.exports) {
         });
 
         if (!putResponse.ok) {
-          const errData = await putResponse.json();
-          throw new Error(errData.message || "Failed to update file content on GitHub.");
+          const errData = await putResponse.json().catch(() => ({}));
+          throw new Error(errData.message || `Failed to update file on GitHub (Status ${putResponse.status}).`);
         }
 
         // Keep local in-memory and browser storage in sync with what was just committed
@@ -1521,8 +1558,17 @@ if (typeof module !== 'undefined' && module.exports) {
         alert("Successfully synchronized! GitHub Pages will rebuild. The changes will be live globally in 30-45 seconds!");
 
       } catch (err) {
-        showStatus("GitHub Sync failed: " + err.message, "error");
-        alert("Sync failed: " + err.message);
+        console.error("GitHub Sync error:", err);
+        let errorMsg = err.message || "Unknown error";
+        if (errorMsg === "Failed to fetch") {
+          if (!navigator.onLine) {
+            errorMsg = "Your device appears offline. Please check your internet connection.";
+          } else {
+            errorMsg = "Network request failed to reach api.github.com.\n\nTroubleshooting Checklist:\n1. If you use Brave Browser, disable 'Brave Shields' for this page (it blocks GitHub API calls).\n2. If using uBlock Origin / Adblock, whitelist this page.\n3. Make sure your GitHub token has 'repo' scope (classic PAT) or 'Contents: Read and write' (Fine-grained PAT).\n4. Check if a VPN or proxy is blocking api.github.com.\n5. Confirm repository path is simply 'mathesh99/Resume' without http:// or spaces.";
+          }
+        }
+        showStatus("GitHub Sync failed: " + errorMsg, "error");
+        alert("Sync failed: " + errorMsg);
       } finally {
         githubSyncBtn.disabled = false;
         githubSyncBtn.innerHTML = originalHtml;
@@ -1532,10 +1578,12 @@ if (typeof module !== 'undefined' && module.exports) {
 
   // Pull latest published configuration from GitHub repository
   const pullLatestFromGitHub = async () => {
-    const repo = localStorage.getItem("githubRepo") || "mathesh99/Resume";
-    const token = localStorage.getItem("githubToken");
+    const rawRepo = localStorage.getItem("githubRepo") || "mathesh99/Resume";
+    const rawToken = localStorage.getItem("githubToken");
+    const repo = normalizeRepo(rawRepo);
+    const token = normalizeToken(rawToken);
 
-    showStatus("Fetching latest resume-data.js from GitHub...", "success");
+    showStatus("Fetching latest resume-data.js from GitHub...", "info");
 
     try {
       const headers = {

@@ -6,9 +6,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (localResumeData) {
     try {
       const parsedLocal = JSON.parse(localResumeData);
+      if (parsedLocal && parsedLocal.personal) {
+        delete parsedLocal.personal.maritalStatus;
+        if (!Array.isArray(parsedLocal.personal.customDetails)) {
+          parsedLocal.personal.customDetails = [];
+        }
+      }
       const remoteTime = window.resumeData?.updatedAt || 0;
       const localTime = parsedLocal?.updatedAt || 0;
-      // If live resume-data.js has a newer or matching timestamp, adopt the fresh GitHub data
+      // If live resume-data.js has a newer or matching timestamp, adopt the fresh data
       if (remoteTime && remoteTime >= localTime) {
         data = window.resumeData;
         localStorage.setItem("customResumeData", JSON.stringify(data));
@@ -290,6 +296,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Icon selector based on category name
   const getCategoryIconClass = (category) => {
     const name = category.toLowerCase();
+    if (name.includes("cyber") || name.includes("security") || name.includes("soc")) return "fa-solid fa-shield-halved";
+    if (name.includes("program") || name.includes("lang")) return "fa-solid fa-code";
+    if (name.includes("data") || name.includes("ml") || name.includes("ai")) return "fa-solid fa-brain";
+    if (name.includes("soft") || name.includes("professional")) return "fa-solid fa-user-check";
     if (name.includes("front")) return "fa-solid fa-laptop-code";
     if (name.includes("back") || name.includes("database")) return "fa-solid fa-server";
     if (name.includes("devops") || name.includes("cloud")) return "fa-solid fa-cloud";
@@ -337,11 +347,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Get project placeholder icon base on tech stack
   const getProjectIcon = (techStack) => {
     const techs = techStack.join(" ").toLowerCase();
+    if (techs.includes("mitre") || techs.includes("soc") || techs.includes("soar") || techs.includes("security")) return "fa-solid fa-shield-halved";
     if (techs.includes("react") || techs.includes("next")) return "fa-brands fa-react";
     if (techs.includes("kubernetes") || techs.includes("docker")) return "fa-brands fa-docker";
     if (techs.includes("node") || techs.includes("express")) return "fa-brands fa-node-js";
     if (techs.includes("go")) return "fa-brands fa-golang";
-    if (techs.includes("python") || techs.includes("flask")) return "fa-brands fa-python";
+    if (techs.includes("python") || techs.includes("flask") || techs.includes("fastapi")) return "fa-brands fa-python";
     return "fa-solid fa-gears";
   };
 
